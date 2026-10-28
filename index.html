@@ -1,0 +1,2313 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Phycom Exam Kit</title>
+<style>
+:root{
+  --bg:#f5f4f0; --panel:#ffffff; --panel2:#faf9f6; --ink:#1d1d1f; --muted:#6b6b72; --line:#e2e0da;
+  --accent:#e8590c; --accent-soft:#fff1e6; --accent-ink:#ffffff;
+  --code-bg:#1d1f23; --code-ink:#e8e8e8; --code-cm:#8b949e;
+  --ok:#2b8a3e; --ok-soft:#ebfbee; --warn:#c92a2a; --warn-soft:#fff5f5; --info:#1971c2; --info-soft:#e7f5ff;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#121214; --panel:#1b1b1f; --panel2:#202025; --ink:#ececf0; --muted:#9c9ca6; --line:#2f2f36;
+    --accent:#ff8a3d; --accent-soft:#2b1f16; --accent-ink:#1a1a1a;
+    --code-bg:#0d0e10; --code-ink:#e8e8e8; --code-cm:#7d8590;
+    --ok:#51cf66; --ok-soft:#14261a; --warn:#ff6b6b; --warn-soft:#2c1517; --info:#4dabf7; --info-soft:#13212e;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#121214; --panel:#1b1b1f; --panel2:#202025; --ink:#ececf0; --muted:#9c9ca6; --line:#2f2f36;
+  --accent:#ff8a3d; --accent-soft:#2b1f16; --accent-ink:#1a1a1a;
+  --code-bg:#0d0e10; --code-ink:#e8e8e8; --code-cm:#7d8590;
+  --ok:#51cf66; --ok-soft:#14261a; --warn:#ff6b6b; --warn-soft:#2c1517; --info:#4dabf7; --info-soft:#13212e;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:14px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans Thai","Sarabun",Roboto,sans-serif}
+code,pre,textarea.mono,.mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+a{color:var(--accent)}
+header{position:sticky;top:0;z-index:10;background:var(--panel);border-bottom:1px solid var(--line)}
+.bar{max-width:1500px;margin:0 auto;padding:10px 16px;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.brand{font-weight:700;font-size:16px;margin-right:8px}
+.brand span{color:var(--accent)}
+nav{display:flex;gap:4px;flex-wrap:wrap}
+nav button{border:0;background:transparent;color:var(--muted);padding:7px 11px;border-radius:8px;font:inherit;cursor:pointer}
+nav button.on{background:var(--accent-soft);color:var(--accent);font-weight:600}
+.spacer{flex:1}
+main{max-width:1500px;margin:0 auto;padding:16px}
+.tab{display:none}.tab.on{display:block}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin-bottom:14px}
+.card h2{margin:0 0 10px;font-size:16px}
+.card h3{margin:14px 0 6px;font-size:14px}
+.muted{color:var(--muted)}
+.small{font-size:12px}
+.grid2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:16px;align-items:start}
+@media (max-width:1000px){.grid2{grid-template-columns:minmax(0,1fr)}}
+.cols{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px 10px}
+label.f{display:flex;flex-direction:column;gap:3px;font-size:12px;color:var(--muted)}
+input,select,textarea{font:inherit;color:var(--ink);background:var(--panel2);border:1px solid var(--line);border-radius:7px;padding:6px 8px;min-width:0}
+input[type=checkbox]{width:auto}
+textarea{width:100%;resize:vertical}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--accent);outline-offset:-1px}
+.btn{border:1px solid var(--line);background:var(--panel2);color:var(--ink);border-radius:8px;padding:6px 11px;font:inherit;cursor:pointer;white-space:nowrap}
+.btn:hover{border-color:var(--accent)}
+.btn.pri{background:var(--accent);color:var(--accent-ink);border-color:var(--accent);font-weight:600}
+.btn.sm{padding:3px 8px;font-size:12px}
+.btn.danger{color:var(--warn)}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.task{border:1px solid var(--line);border-radius:10px;padding:10px;margin-bottom:10px;background:var(--panel2)}
+.task .head{display:flex;gap:8px;align-items:center;margin-bottom:8px;flex-wrap:wrap}
+.pill{font-size:11px;font-weight:700;padding:2px 8px;border-radius:99px}
+.pill.pub{background:var(--info-soft);color:var(--info)}
+.pill.sub{background:var(--ok-soft);color:var(--ok)}
+.topic{display:flex;align-items:center;gap:0;flex:1;min-width:180px}
+.topic span{padding:6px 6px 6px 8px;background:var(--line);border-radius:7px 0 0 7px;font-size:13px}
+.topic input{border-radius:0 7px 7px 0;flex:1}
+.hw{border:1px solid var(--line);border-radius:10px;padding:8px 10px;margin-bottom:8px}
+.hw.used{border-color:var(--accent)}
+.hw .t{display:flex;gap:8px;align-items:center;font-weight:600;margin-bottom:6px;flex-wrap:wrap}
+.hw .pins{display:grid;grid-template-columns:repeat(auto-fill,minmax(64px,1fr));gap:6px}
+.hw .pins label{font-size:11px;color:var(--muted);display:flex;flex-direction:column}
+.hw .pins input{padding:4px 6px}
+.hw.off .pins,.hw.off .opts{opacity:.45}
+.opts{display:flex;gap:10px;flex-wrap:wrap;margin-top:6px;font-size:12px;align-items:center}
+.msg{padding:8px 10px;border-radius:8px;margin:6px 0;font-size:13px}
+.msg.warn{background:var(--warn-soft);color:var(--warn)}
+.msg.ok{background:var(--ok-soft);color:var(--ok)}
+.msg.info{background:var(--info-soft);color:var(--info)}
+pre.code{background:var(--code-bg);color:var(--code-ink);padding:12px 14px;border-radius:10px;overflow:auto;font-size:12.5px;line-height:1.5;margin:0;max-height:75vh;tab-size:2}
+pre.code.short{max-height:none}
+.sticky{position:sticky;top:64px}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th,td{border-bottom:1px solid var(--line);padding:5px 8px;text-align:left;vertical-align:top}
+th{color:var(--muted);font-weight:600;font-size:12px}
+.tblwrap{overflow-x:auto}
+.kbd{display:inline-block;border:1px solid var(--line);border-bottom-width:2px;border-radius:5px;padding:0 5px;font-size:12px;background:var(--panel2)}
+.snip{margin-bottom:14px}
+.snip .head{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:6px}
+.snip .head b{flex:1}
+details.card summary{cursor:pointer;font-weight:600}
+.log{background:var(--code-bg);color:var(--code-ink);border-radius:10px;padding:10px;height:340px;overflow:auto;font-size:12.5px}
+.log div{white-space:pre-wrap;word-break:break-all}
+.segsvg path{cursor:pointer}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:8px 14px;border-radius:8px;opacity:0;transition:opacity .2s;pointer-events:none;z-index:99}
+.toast.on{opacity:1}
+ul.tight{margin:4px 0;padding-left:20px}
+ul.tight li{margin:2px 0}
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:14px}
+.diagrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(360px,1fr));gap:14px}
+.diagrid .full{grid-column:1/-1}
+@media (max-width:420px){.diagrid{grid-template-columns:minmax(0,1fr)}}
+.fig{background:var(--panel2);border-radius:10px;padding:10px;text-align:center;overflow-x:auto}
+.dia{width:100%;height:auto;font-family:inherit}
+.dia text{fill:var(--ink);font-size:12px}
+.dia text.tg{fill:#fff;font-weight:700;font-size:12px}
+.dia text.mut{fill:var(--muted);font-size:11px}
+.dia text.b{font-weight:700;font-size:12px}
+.dia text.dl{fill:var(--ink);font-size:10.5px;font-weight:600}
+</style>
+</head>
+<body>
+<header>
+  <div class="bar">
+    <div class="brand">Phycom <span>Exam Kit</span> <span class="muted small">· UNO R4 WiFi + MQTT</span></div>
+    <nav id="nav">
+      <button data-tab="gen" class="on">⚙️ Generator</button>
+      <button data-tab="dia">🖼 ภาพต่อขา</button>
+      <button data-tab="mock">✅ เฉลย Mock</button>
+      <button data-tab="wire">🔌 ต่อวงจร</button>
+      <button data-tab="snip">📚 โค้ดทดสอบ/Snippets</button>
+      <button data-tab="seg">🔢 7-Seg tool</button>
+      <button data-tab="mqtt">📡 MQTT Tester</button>
+      <button data-tab="debug">🩺 แก้ปัญหา</button>
+    </nav>
+    <div class="spacer"></div>
+    <button class="btn sm" id="themeBtn" title="สลับธีม">🌓</button>
+  </div>
+</header>
+
+<main>
+<!-- ======================= GENERATOR ======================= -->
+<section class="tab on" id="tab-gen">
+  <div class="msg info">วิธีใช้: ① เลือก preset หรือกด “+ เพิ่มข้อ” ตามโจทย์ ② ใส่รหัส นศ. / WiFi ③ เช็กขาในกล่อง Hardware (กด Auto-assign ได้) ④ Copy โค้ดไปวางใน Arduino IDE → Upload → เปิด Serial Monitor <b>115200</b></div>
+  <div class="grid2">
+    <div>
+      <div class="card">
+        <h2>Preset</h2>
+        <div class="row" id="presets"></div>
+      </div>
+      <div class="card">
+        <h2>Connection</h2>
+        <div class="cols" id="cfg"></div>
+        <p class="small muted" style="margin:8px 0 0">บอร์ดใช้ <b>port 1883</b> (TCP) — 8884 ในหน้าเว็บคือ WebSocket ของเบราว์เซอร์ ไม่ใช่ของบอร์ด · Hotspot ต้องเป็น <b>2.4 GHz</b></p>
+      </div>
+      <div class="card">
+        <h2>ข้อสอบ (Tasks)</h2>
+        <div id="tasks"></div>
+        <div class="row">
+          <select id="addType"></select>
+          <button class="btn pri" id="addBtn">+ เพิ่มข้อ</button>
+        </div>
+      </div>
+      <div class="card">
+        <div class="row" style="margin-bottom:8px"><h2 style="margin:0;flex:1">Hardware / ขา</h2><button class="btn sm" id="autoPins">Auto-assign pins</button></div>
+        <p class="small muted" style="margin:0 0 8px">กรอบส้ม = ถูกใช้โดยข้อสอบ (เปิดอัตโนมัติ) · ใส่ขาเป็น 2–13 หรือ A0–A5 · D0/D1 ใช้เป็น GPIO ได้บน R4 (Serial ผ่าน USB แยก)</p>
+        <div id="hw"></div>
+      </div>
+    </div>
+    <div class="sticky">
+      <div class="card">
+        <div class="row" style="margin-bottom:8px">
+          <h2 style="margin:0;flex:1">โค้ด .ino</h2>
+          <button class="btn pri" id="copyCode">Copy</button>
+          <button class="btn" id="dlCode">Download .ino</button>
+        </div>
+        <div id="warns"></div>
+        <details style="margin:6px 0 10px"><summary class="small">ตารางต่อสาย (ขาที่ใช้)</summary><div class="tblwrap" id="pinTable"></div></details>
+        <pre class="code" id="out"></pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= DIAGRAMS ======================= -->
+<section class="tab" id="tab-dia">
+  <div class="msg info">ภาพทุกอันใช้เลขขาตามที่ตั้งใน <b>Generator</b> (เปลี่ยนขาที่นั่น ภาพเปลี่ยนตาม) · สายแดง = 5V · สายเทา = GND · สายสีอื่น = สายสัญญาณไปขาบนบอร์ด</div>
+  <label class="row small" style="margin-bottom:10px"><input type="checkbox" id="diaOnlyUsed"> แสดงเฉพาะอุปกรณ์ที่ข้อสอบใน Generator ใช้</label>
+  <div class="diagrid" id="diagrams"></div>
+</section>
+
+<!-- ======================= MOCK ======================= -->
+<section class="tab" id="tab-mock">
+  <div class="card">
+    <h2>เฉลย Mock Exam (phycom.it.kmitl.ac.th · ปีการศึกษา 2566)</h2>
+    <p>ไฟล์เฉลยเต็ม: <code>sketches/MOCK_EXAM_SOLUTION/MOCK_EXAM_SOLUTION.ino</code> ใน zip · หรือกดปุ่มด้านล่างเพื่อโหลดเข้า Generator แล้วแก้รหัส/WiFi/ขาได้ทันที</p>
+    <div class="row"><button class="btn pri" data-preset="mock">โหลดเฉลย Mock เข้า Generator</button></div>
+  </div>
+  <div class="two">
+    <div class="card">
+      <h2>Publish (บอร์ด → server)</h2>
+      <div class="tblwrap"><table>
+        <tr><th>#</th><th>Topic</th><th>โจทย์</th><th>Logic ในโค้ด</th></tr>
+        <tr><td>1</td><td><code>SID/temp</code></td><td>อ่าน sensor อุณหภูมิ ส่งค่า</td><td><code>String(g_temp, 1)</code> (Thermistor NTC 10k ค่าเริ่มต้น เปลี่ยนชนิดได้)</td></tr>
+        <tr><td>2</td><td><code>SID/light</code></td><td>Pot ส่ง 0–1023</td><td><code>String(analogRead(A0))</code> (R4 อ่าน 10-bit เป็นค่าเริ่มต้น)</td></tr>
+        <tr><td>3</td><td><code>SID/food</code></td><td>&gt; 20 cm → <code>off</code> · ≤ 20 → <code>on</code></td><td><code>(g_dist &gt; 20) ? "off" : "on"</code></td></tr>
+        <tr><td>4</td><td><code>SID/door</code></td><td>≥ 20 cm <b>และ</b> กดปุ่ม → <code>On</code> · อื่นๆ → <code>Off</code></td><td><code>(g_dist &gt;= 20 &amp;&amp; buttonPressed()) ? "On" : "Off"</code></td></tr>
+      </table></div>
+      <div class="msg warn">ระวังตัวพิมพ์: ข้อ 3 เป็น <code>on/off</code> ตัวเล็ก · ข้อ 4 เป็น <code>On/Off</code> ตัวใหญ่ — server เทียบ string ตรงตัว</div>
+      <p class="small muted">กลไก: อ่าน sensor ทุก 100 ms · ส่งซ้ำทุก 1 วิ · ข้อความเงื่อนไข (on/off) ส่งทันทีเมื่อเปลี่ยน → กดปุ่มแล้วเว็บเปลี่ยนทันที (กดค้างไว้)</p>
+    </div>
+    <div class="card">
+      <h2>Subscribe (server → บอร์ด, ส่งทุก 3 วิ)</h2>
+      <div class="tblwrap"><table>
+        <tr><th>#</th><th>Topic</th><th>โจทย์</th><th>Logic</th></tr>
+        <tr><td>1</td><td><code>SID/venus</code></td><td>36–50 แดง · 26–35 ฟ้า · 10–25 เขียว</td><td><code>int v = round(msg.toFloat());</code> แล้ว if-else ช่วง; นอกช่วง = ดับ</td></tr>
+        <tr><td>2</td><td><code>SID/prob_stat</code></td><td>เลข 0–9 → 7-seg 1 หลัก</td><td><code>segShowNumber(msg.toInt())</code></td></tr>
+      </table></div>
+      <div class="msg info">RGB ในแล็บเป็น <b>Common Anode</b> (LOW = ติด) — ถ้าสีกลับด้าน (ติดทุกสีเว้นสีที่ต้องการ) ให้สลับ checkbox “common anode” ใน Hardware</div>
+      <h3>โครงหลักของโค้ด</h3>
+<pre class="code short">void onMqttMessage(int size) {
+  String topic = mqtt.messageTopic();
+  String msg = "";
+  while (mqtt.available()) msg += (char)mqtt.read();
+  msg.trim();
+  if (topic == SID + "/venus") {
+    int v = (int)round(msg.toFloat());
+    if      (v &gt;= 36 &amp;&amp; v &lt;= 50) rgbColor(1, 0, 0); // แดง
+    else if (v &gt;= 26 &amp;&amp; v &lt;= 35) rgbColor(0, 0, 1); // ฟ้า
+    else if (v &gt;= 10 &amp;&amp; v &lt;= 25) rgbColor(0, 1, 0); // เขียว
+    else                          rgbColor(0, 0, 0);
+  }
+  if (topic == SID + "/prob_stat") segShowNumber(msg.toInt());
+}</pre>
+    </div>
+  </div>
+  <div class="card">
+    <h2>ข้อสอบจริงน่าจะมาแนวไหน (อุปกรณ์: Keypad 4x4, LCD 16x2, 7-seg 2 ตัว, Ultrasonic, Pot)</h2>
+    <ul class="tight">
+      <li><b>Keypad → Publish</b> ปุ่มที่กด / รหัสผ่าน (พิมพ์แล้วกด #) → ใช้ task “PUB Keypad”</li>
+      <li><b>Subscribe → LCD</b> แสดงข้อความ/ค่าที่ server ส่งมา → “SUB แสดงบน LCD”</li>
+      <li><b>Subscribe → 7-seg 2 หลัก</b> 00–99 (multiplex) → ตั้ง Hardware 7-Segment = 2 หลัก + task “SUB 7-Segment”</li>
+      <li><b>Ultrasonic/Pot → Publish</b> ค่า หรือข้อความตามเงื่อนไข → “PUB ค่า sensor” / “PUB ข้อความตามเงื่อนไข”</li>
+      <li>แสดงค่าบนบอร์ดด้วย (เช่น ระยะบน LCD) → ช่อง “แสดงบน” ในแต่ละข้อ</li>
+    </ul>
+    <div class="row"><button class="btn" data-preset="pracA">ฝึก A: Keypad + LCD + Pot</button><button class="btn" data-preset="pracB">ฝึก B: Ultrasonic + 7-seg 2 หลัก</button></div>
+    <p class="small muted">เฉลยฝึก A/B อยู่ใน zip: <code>sketches/PRACTICE_A_Keypad_LCD</code>, <code>sketches/PRACTICE_B_Ultra_7seg2</code></p>
+    <div class="msg warn">ขาไม่พอ! R4 มี 20 ขา (D0–D13 + A0–A5). Keypad 8 + LCD parallel 6 + 7-seg 2 หลัก 9 = 23 → ใช้ทั้งหมดพร้อมกันไม่ได้ ถ้าโจทย์ให้ใช้พร้อมกันจริง: ใช้ LCD I2C (2 ขา) หรือ 7-seg 1 หลัก/ต่อ common ลง GND</div>
+  </div>
+</section>
+
+<!-- ======================= WIRING ======================= -->
+<section class="tab" id="tab-wire">
+  <div class="two">
+    <div class="card">
+      <h2>UNO R4 WiFi — สิ่งที่ต้องรู้</h2>
+      <ul class="tight">
+        <li>Logic <b>5V</b> · กระแสต่อขา ~<b>8 mA</b> (น้อยกว่า R3!) → LED ใส่ R 220Ω–1kΩ เสมอ</li>
+        <li>ขา digital: D0–D13, A0–A5 ใช้เป็น digital ได้ (A0=14 … A5=19)</li>
+        <li>PWM (<code>analogWrite</code>): <b>3, 5, 6, 9, 10, 11</b></li>
+        <li><code>analogRead</code> = 0–1023 (10-bit) · เปลี่ยนได้ <code>analogReadResolution(12/14)</code></li>
+        <li>I2C: <b>A4 = SDA, A5 = SCL</b> (ขา SDA/SCL บนหัวบอร์ดคือสายเดียวกัน)</li>
+        <li><code>Serial</code> = USB · <code>Serial1</code> = D0/D1 → D0/D1 ว่างใช้ได้</li>
+        <li>LED_BUILTIN = D13</li>
+        <li>Board ใน IDE: <b>Arduino UNO R4 WiFi</b> · lib WiFi = <code>WiFiS3.h</code></li>
+        <li>Upload ไม่เข้า → กด reset 2 ครั้งเร็วๆ (bootloader) แล้วเลือก port ใหม่</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h2>HC-SR04 Ultrasonic</h2>
+      <table><tr><th>ขาเซนเซอร์</th><th>ต่อไป</th></tr>
+        <tr><td>VCC</td><td>5V</td></tr><tr><td>Trig</td><td>D12 (output)</td></tr><tr><td>Echo</td><td>D13 (input)</td></tr><tr><td>GND</td><td>GND</td></tr></table>
+      <p>ระยะ (cm) = เวลา echo (µs) × 0.0343 / 2 ≈ <code>us / 58.3</code></p>
+      <p class="small muted">อ่านได้ 0 / 999 = ไม่มี echo (สายหลวม, สลับ Trig/Echo, ไม่มีวัตถุ, ไกลเกิน 4 m) · วัดได้ ~2–400 cm</p>
+    </div>
+    <div class="card">
+      <h2>LCD 16x2 (parallel, 16 ขา)</h2>
+      <div class="tblwrap"><table>
+        <tr><th>ขา</th><th>ชื่อ</th><th>ต่อไป</th></tr>
+        <tr><td>1</td><td>VSS</td><td>GND</td></tr>
+        <tr><td>2</td><td>VDD</td><td>5V</td></tr>
+        <tr><td>3</td><td>V0 (contrast)</td><td>ขากลาง Pot (ขาข้าง 5V/GND) <b>หรือ</b> R 1k–2.2k ลง GND</td></tr>
+        <tr><td>4</td><td>RS</td><td>D12 (ค่าเริ่มต้น)</td></tr>
+        <tr><td>5</td><td>RW</td><td><b>GND</b> (เขียนอย่างเดียว)</td></tr>
+        <tr><td>6</td><td>E</td><td>D11</td></tr>
+        <tr><td>7–10</td><td>D0–D3</td><td>ไม่ต่อ (โหมด 4-bit)</td></tr>
+        <tr><td>11</td><td>D4</td><td>D5</td></tr>
+        <tr><td>12</td><td>D5</td><td>D4</td></tr>
+        <tr><td>13</td><td>D6</td><td>D3</td></tr>
+        <tr><td>14</td><td>D7</td><td>D2</td></tr>
+        <tr><td>15</td><td>A (LED+)</td><td>5V (ผ่าน R 220Ω ถ้าไม่มีในบอร์ด)</td></tr>
+        <tr><td>16</td><td>K (LED−)</td><td>GND</td></tr>
+      </table></div>
+      <div class="msg warn">จอติดแต่ไม่มีตัวหนังสือ / เห็นแต่สี่เหลี่ยม = ปรับ contrast (V0) · ถ้า Pot เอาไปใช้ทำโจทย์ ให้ต่อ V0 ผ่าน R ~1k ลง GND แทน</div>
+      <p><b>LCD I2C</b> (ถ้ามีบอร์ดหลังจอ 4 ขา): GND, VCC→5V, SDA→A4, SCL→A5 · address ปกติ <code>0x27</code> หรือ <code>0x3F</code> (หาได้ด้วย I2C scanner ในแท็บ Snippets) · lib: <i>LiquidCrystal I2C</i> (Frank de Brabander)</p>
+    </div>
+    <div class="card">
+      <h2>Keypad 4x4 (membrane, 8 ขา)</h2>
+      <p>หงายหน้าปุ่ม สายอยู่ด้านล่าง นับจาก<b>ซ้าย → ขวา</b>: <b>R1 R2 R3 R4 C1 C2 C3 C4</b></p>
+      <table><tr><th></th><th>C1</th><th>C2</th><th>C3</th><th>C4</th></tr>
+        <tr><th>R1</th><td>1</td><td>2</td><td>3</td><td>A</td></tr>
+        <tr><th>R2</th><td>4</td><td>5</td><td>6</td><td>B</td></tr>
+        <tr><th>R3</th><td>7</td><td>8</td><td>9</td><td>C</td></tr>
+        <tr><th>R4</th><td>*</td><td>0</td><td>#</td><td>D</td></tr></table>
+      <p>ค่าเริ่มต้น: R1..R4 → D9, D8, D7, D6 · C1..C4 → D5, D4, D3, D2 (ต่อตรง ไม่ต้องมี R)</p>
+      <p class="small muted">ปุ่มที่ได้ “เพี้ยน” (เช่นกด 1 ได้ D) = สลับลำดับ/กลับด้านสาย → แก้ array rowPins/colPins ในโค้ด ไม่ต้องย้ายสาย · lib: <i>Keypad</i> by Mark Stanley (มีแล้วในเครื่อง)</p>
+    </div>
+    <div class="card">
+      <h2>7-Segment 1 หลัก (10 ขา)</h2>
+      <svg viewBox="0 0 260 170" width="260" style="max-width:100%">
+        <rect x="70" y="20" width="120" height="130" rx="8" fill="none" stroke="currentColor" opacity=".5"/>
+        <g font-size="12" fill="currentColor" text-anchor="middle">
+          <text x="86" y="14">g</text><text x="108" y="14">f</text><text x="130" y="14">COM</text><text x="152" y="14">a</text><text x="174" y="14">b</text>
+          <text x="86" y="166">e</text><text x="108" y="166">d</text><text x="130" y="166">COM</text><text x="152" y="166">c</text><text x="174" y="166">dp</text>
+        </g>
+        <g fill="var(--accent)"><rect x="105" y="38" width="44" height="8" rx="3"/><rect x="149" y="46" width="8" height="34" rx="3"/><rect x="149" y="90" width="8" height="34" rx="3"/><rect x="105" y="124" width="44" height="8" rx="3"/><rect x="97" y="90" width="8" height="34" rx="3"/><rect x="97" y="46" width="8" height="34" rx="3"/><rect x="105" y="81" width="44" height="8" rx="3"/><circle cx="168" cy="130" r="4"/></g>
+        <g font-size="11" fill="currentColor" text-anchor="middle"><text x="127" y="34">a</text><text x="167" y="66">b</text><text x="167" y="110">c</text><text x="127" y="146">d</text><text x="87" y="110">e</text><text x="87" y="66">f</text><text x="127" y="78">g</text></g>
+      </svg>
+      <p class="small">มองหน้าจอ (จุด dp อยู่ล่างขวา) · แถวบน: g f COM a b · แถวล่าง: e d COM c dp · ขา COM 2 ขาเชื่อมกันภายใน</p>
+      <ul class="tight">
+        <li><b>Common Cathode</b> (เช่น 5161<b>A</b>S): COM → GND, segment HIGH = ติด</li>
+        <li><b>Common Anode</b> (5161<b>B</b>S): COM → 5V, segment LOW = ติด</li>
+        <li>ทุก segment ใส่ R 220Ω–1kΩ (R4 จ่ายต่อขาได้น้อย)</li>
+        <li>ไม่รู้ชนิด: ต่อ COM→GND, จ่าย 5V ผ่าน R เข้า a → ติด = CC; ไม่ติด ลอง COM→5V, a→GND ผ่าน R</li>
+      </ul>
+      <h3>2 หลัก (multiplex แบบที่แล็บทำ)</h3>
+      <p class="small">ต่อ segment a–g ของทั้ง 2 ตัว<b>ขนานกัน</b> (ใช้ 7 ขา) · COM ตัวซ้าย → ขา DIG1, COM ตัวขวา → ขา DIG2 (ห้ามต่อลง GND ตรง) · โค้ดสลับเปิดทีละหลักเร็วๆ (ทุก 3 ms) ด้วย <code>millis/micros</code> ห้ามใช้ <code>delay</code> ยาวๆ ไม่งั้น MQTT ไม่ทำงาน</p>
+    </div>
+    <div class="card">
+      <h2>RGB LED · ปุ่ม · Pot · Buzzer · Temp</h2>
+      <ul class="tight">
+        <li><b>RGB</b> (4 ขา, ขายาวสุด = common): CA → 5V, CC → GND · R/G/B → R 220Ω → ขา (ค่าเริ่ม 9/10/11)</li>
+        <li><b>ปุ่ม 2 ขา</b>: ขาหนึ่ง → ขา Arduino (ค่าเริ่ม A2), อีกขา → GND (ไม่มีขั้ว, ไม่ต้องมี R) · ปุ่ม 4 ขาใช้ขาทแยงมุม · โค้ดใช้ <code>INPUT_PULLUP</code> → กด = <code>LOW</code></li>
+        <li><b>Pot</b>: ขาข้าง → 5V และ GND, ขากลาง → A0</li>
+        <li><b>Buzzer</b>: + → ขา, − → GND · passive ใช้ <code>tone(pin,1000)</code>; active ใช้ <code>digitalWrite</code></li>
+        <li><b>DHT11/22</b>: VCC 5V, DATA → ขา (+ R 10k pull-up ถ้าเป็นตัวเปล่า 4 ขา), GND · lib: <i>DHT sensor library</i> (Adafruit) + <i>Adafruit Unified Sensor</i></li>
+        <li><b>LM35</b> (หันหน้าแบน): 5V · OUT → A1 · GND → °C = V × 100</li>
+        <li><b>TMP36</b>: เหมือน LM35 · °C = (V − 0.5) × 100</li>
+        <li><b>Thermistor NTC 10k</b> (ใช้ตัวนี้): 5V → R 10k → <b>A1</b> → NTC → GND · ถ้าต่อกลับ (NTC ฝั่ง 5V) ให้ติ๊ก “NTC อยู่ฝั่ง 5V” ใน Generator · β ปกติ 3950 (บางตัว 3435) · <b>เช็ก</b>: เอานิ้วจับ NTC ค่าต้อง<b>ขึ้น</b> · ห้องปกติ ≈ 25–32 °C · โมดูล 3 ขา (KY-013 ฯลฯ) ต่อ S → A1, + → 5V, − → GND แล้วถ้าค่ากลับด้านให้ติ๊กสลับ</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= SNIPPETS ======================= -->
+<section class="tab" id="tab-snip">
+  <div class="msg info">ทุกอันเป็นไฟล์ .ino แยกใน zip (<code>sketches/TEST_*</code>) · แนะนำ: ก่อนรวมโค้ด ทดสอบอุปกรณ์ทีละตัวด้วยไฟล์ TEST ก่อน</div>
+  <div class="row" style="margin-bottom:10px"><input id="snipFilter" placeholder="ค้นหา… (เช่น lcd, keypad, string)" style="flex:1;min-width:200px"></div>
+  <div id="snips"></div>
+</section>
+
+<!-- ======================= 7SEG TOOL ======================= -->
+<section class="tab" id="tab-seg">
+  <div class="two">
+    <div class="card">
+      <h2>คลิก segment เพื่อสร้าง pattern</h2>
+      <svg class="segsvg" id="segSvg" viewBox="0 0 140 220" width="180">
+        <path data-s="0" d="M30 15 h80 l-10 12 h-60 z"/>
+        <path data-s="1" d="M114 20 v80 l-12 -8 v-60 z"/>
+        <path data-s="2" d="M114 118 v80 l-12 -12 v-60 z"/>
+        <path data-s="3" d="M30 205 h80 l-10 -12 h-60 z"/>
+        <path data-s="4" d="M26 118 v80 l12 -12 v-60 z"/>
+        <path data-s="5" d="M26 20 v80 l12 -8 v-60 z"/>
+        <path data-s="6" d="M32 109 l8 -8 h60 l8 8 l-8 8 h-60 z"/>
+        <circle data-s="7" cx="128" cy="205" r="7"/>
+      </svg>
+      <div class="row"><select id="segQuick"></select><button class="btn sm" id="segClear">ล้าง</button></div>
+    </div>
+    <div class="card">
+      <h2>ผลลัพธ์</h2>
+      <div id="segOut"></div>
+      <h3>ตารางมาตรฐาน (bit0 = a … bit6 = g, Common Cathode)</h3>
+<pre class="code short">const byte SEG_DIGITS[10] = {
+  0x3F, 0x06, 0x5B, 0x4F, 0x66, // 0 1 2 3 4
+  0x6D, 0x7D, 0x07, 0x7F, 0x6F  // 5 6 7 8 9
+};
+// ตัวอักษร: A=0x77 b=0x7C C=0x39 d=0x5E E=0x79 F=0x71
+//          H=0x76 L=0x38 P=0x73 U=0x3E -=0x40 blank=0x00
+// Common Anode: กลับบิต → ~pattern (หรือ digitalWrite(!on))</pre>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= MQTT TESTER ======================= -->
+<section class="tab" id="tab-mqtt">
+  <div class="card">
+    <h2>MQTT Tester (ในเบราว์เซอร์ — ต้องมีเน็ต, โหลด mqtt.js จาก CDN)</h2>
+    <p class="small muted">ใช้ดูว่าบอร์ด publish อะไรออกมา และลองส่งค่าเข้า topic ที่บอร์ด subscribe · ระหว่างสอบแนะนำ “ดูอย่างเดียว” (ข้อความที่ส่งไป topic ของเราอาจปนกับที่ server ส่ง)</p>
+    <div class="cols">
+      <label class="f">WebSocket URL<input id="mUrl" value="wss://phycom.it.kmitl.ac.th:8884/mqtt"></label>
+      <label class="f">Student ID / prefix<input id="mSid" value="68070006"></label>
+      <label class="f">Subscribe filter<input id="mFilter" value="68070006/#"></label>
+    </div>
+    <div class="row" style="margin-top:8px">
+      <button class="btn pri" id="mConn">Connect</button>
+      <button class="btn" id="mDisc">Disconnect</button>
+      <span id="mStat" class="small muted">ยังไม่ต่อ</span>
+      <span class="spacer"></span>
+      <button class="btn sm" data-broker="wss://phycom.it.kmitl.ac.th:8884/mqtt">broker สอบ</button>
+      <button class="btn sm" data-broker="wss://broker.hivemq.com:8884/mqtt">HiveMQ สำรอง</button>
+    </div>
+  </div>
+  <div class="two">
+    <div class="card">
+      <h2>Publish</h2>
+      <div class="row"><div class="topic"><span id="mPre">68070006/</span><input id="mTopic" value="venus"></div><input id="mPayload" value="30" style="width:110px"><button class="btn pri" id="mPub">Send</button></div>
+      <p class="small muted">ทางลัด:</p>
+      <div class="chips" id="mQuick"></div>
+    </div>
+    <div class="card">
+      <div class="row"><h2 style="margin:0;flex:1">Log</h2><button class="btn sm" id="mClr">ล้าง</button></div>
+      <div class="log mono" id="mLog"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= DEBUG ======================= -->
+<section class="tab" id="tab-debug">
+  <div class="two">
+    <div class="card">
+      <h2>Checklist ก่อนกด Upload</h2>
+      <ul class="tight">
+        <li>Tools → Board = <b>Arduino UNO R4 WiFi</b>, Port ถูกตัว</li>
+        <li>Libraries: <b>ArduinoMqttClient</b>, <b>Keypad</b>, (DHT sensor library + Adafruit Unified Sensor), (LiquidCrystal I2C) — มี .zip ในโฟลเดอร์ <code>libraries/</code> → Sketch → Include Library → Add .ZIP Library</li>
+        <li>SSID/Password ถูก, hotspot เป็น <b>2.4 GHz</b> (iPhone: เปิด “Maximize Compatibility”)</li>
+        <li>รหัส นศ. ใน <code>SID</code> ตรงกับที่ login เว็บ</li>
+        <li>ชื่อ topic ตรงตัว (ตัวเล็ก/ใหญ่, ไม่มีช่องว่าง)</li>
+        <li>ข้อความ payload ตรงตัว (<code>on</code> ≠ <code>On</code>)</li>
+        <li>Serial Monitor ตั้ง <b>115200</b> baud</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h2>MQTT connectError()</h2>
+      <table>
+        <tr><th>code</th><th>ความหมาย</th><th>แก้</th></tr>
+        <tr><td>-2</td><td>CONNECTION_REFUSED</td><td>broker/port ผิด, WiFi ไม่มีเน็ต, port ต้อง 1883</td></tr>
+        <tr><td>-1</td><td>TIMEOUT</td><td>เน็ตช้า/บล็อก port · ลอง hotspot มือถือ</td></tr>
+        <tr><td>1</td><td>UNACCEPTABLE_PROTOCOL</td><td>broker ไม่รองรับ MQTT 3.1.1</td></tr>
+        <tr><td>2</td><td>IDENTIFIER_REJECTED</td><td>client id ซ้ำ/ผิด — โค้ดสุ่ม id ให้แล้ว</td></tr>
+        <tr><td>3</td><td>SERVER_UNAVAILABLE</td><td>server ล่ม รอ/ถาม TA</td></tr>
+        <tr><td>4</td><td>BAD_USER_NAME_OR_PASSWORD</td><td>ใส่ user/pass ใน Generator</td></tr>
+        <tr><td>5</td><td>NOT_AUTHORIZED</td><td>ไม่มีสิทธิ์ → ถาม TA</td></tr>
+      </table>
+      <p class="small muted">ทดสอบแล้ว (28 ต.ค.): <code>phycom.it.kmitl.ac.th:1883</code> รับ anonymous connect ได้ (CONNACK 0) · <code>:8884/mqtt</code> = WebSocket TLS</p>
+    </div>
+    <div class="card">
+      <h2>อาการ → สาเหตุ</h2>
+      <table>
+        <tr><th>อาการ</th><th>ลองแก้</th></tr>
+        <tr><td>ค้างที่ “WiFi: connecting…”</td><td>SSID/pass ผิด, 5 GHz, อัปเดต firmware WiFi (Tools → WiFi101/WiFiNINA Firmware Updater / Arduino IDE 2: Tools → Firmware Updater) หรือรัน TEST_WiFi_Scan ดูว่าเห็น SSID ไหม</td></tr>
+        <tr><td>Serial ไม่ขึ้นอะไรเลย</td><td>baud ไม่ตรง (115200) · กด reset บอร์ด</td></tr>
+        <tr><td>เว็บไม่ขึ้นค่า</td><td>ดู Serial ว่ามี “PUB SID/…” ไหม → ถ้ามี = topic/SID ผิด · ใช้แท็บ MQTT Tester subscribe <code>SID/#</code> ดู</td></tr>
+        <tr><td>ไม่ได้รับ subscribe</td><td>ต้องเรียก <code>mqtt.poll()</code> ใน loop บ่อยๆ · ห้าม <code>delay()</code> ยาว · topic subscribe ตรงไหม</td></tr>
+        <tr><td>Ultrasonic = 999 ตลอด</td><td>สลับ Trig/Echo, VCC ต้อง 5V, GND ร่วม</td></tr>
+        <tr><td>Pot ค่ากระโดด/ค้าง 0 หรือ 1023</td><td>ขากลางต้องไป A0, ขาข้างไป 5V/GND</td></tr>
+        <tr><td>ปุ่มอ่านค่าสุ่ม</td><td>ใช้ INPUT_PULLUP และขาทแยงของปุ่ม</td></tr>
+        <tr><td>7-seg แสดงเลขแปลก</td><td>ลำดับ a–g ผิด → TEST_7Seg_Finder หา · เลขกลับด้าน = CA/CC สลับ</td></tr>
+        <tr><td>7-seg 2 หลักกระพริบ</td><td>ปกติเล็กน้อยตอน pulseIn/WiFi · ห้าม delay ใน loop</td></tr>
+        <tr><td>LCD สี่เหลี่ยมเต็มแถวบน</td><td>contrast หรือ RS/E/D4–D7 ต่อผิด / ไม่ได้ <code>lcd.begin(16,2)</code></td></tr>
+        <tr><td>Keypad ได้ตัวอักษรผิด</td><td>สลับ rowPins/colPins หรือกลับลำดับ array</td></tr>
+        <tr><td>DHT ได้ nan</td><td>ชนิด DHT11/22 ผิด, ไม่มี pull-up, อ่านถี่เกิน (≥2 วิ)</td></tr>
+        <tr><td>Compile: “No such file Keypad.h”</td><td>ติดตั้ง lib (zip ในโฟลเดอร์ libraries/)</td></tr>
+      </table>
+    </div>
+    <div class="card">
+      <h2>C++ / Arduino String cheat</h2>
+<pre class="code short">msg.toInt()            // "42" → 42, "abc" → 0
+msg.toFloat()          // "25.5" → 25.5
+msg.trim();            // ตัด \r \n ช่องว่าง (แก้ในตัว)
+msg.equalsIgnoreCase("ON")
+msg.startsWith("led") / msg.endsWith("x")
+msg.indexOf(',')       // -1 ถ้าไม่เจอ
+msg.substring(a, b)    // [a, b)
+msg.charAt(0) / msg[0]
+msg.length()
+msg.toUpperCase();     // แก้ในตัว
+String(3.14159, 2)     // "3.14"
+String(255, HEX)       // "ff"
+isDigit(c) isAlpha(c)
+map(x, 0, 1023, 0, 100)
+constrain(x, 0, 255)
+
+// แยก "25,60"
+int c = msg.indexOf(',');
+int a = msg.substring(0, c).toInt();
+int b = msg.substring(c + 1).toInt();
+
+// ทำงานทุก 1 วิ แบบไม่ block
+static unsigned long t = 0;
+if (millis() - t &gt;= 1000) { t = millis(); /* ... */ }
+
+// ตรวจขอบขาลงของปุ่ม (กด 1 ครั้ง = 1 event)
+static bool last = HIGH;
+bool now = digitalRead(BTN);
+if (last == HIGH &amp;&amp; now == LOW) { /* pressed */ }
+last = now;</pre>
+    </div>
+  </div>
+</section>
+</main>
+<div class="toast" id="toast"></div>
+
+<!-- ======================= SNIPPET SOURCES ======================= -->
+<script type="text/plain" class="snipsrc" data-file="TEST_WiFi_Scan" data-title="WiFi scan + firmware (เช็ก hotspot 2.4 GHz)" data-tags="wifi">
+#include <WiFiS3.h>
+
+void setup() {
+  Serial.begin(115200);
+  while (!Serial && millis() < 3000) {}
+  Serial.print("WiFi firmware: ");
+  Serial.println(WiFi.firmwareVersion());
+  Serial.println("Scanning...");
+  int n = WiFi.scanNetworks();
+  for (int i = 0; i < n; i++) {
+    Serial.print(i + 1);
+    Serial.print(") ");
+    Serial.print(WiFi.SSID(i));
+    Serial.print("  RSSI=");
+    Serial.println(WiFi.RSSI(i));
+  }
+  Serial.println("ไม่เห็นชื่อ hotspot = เป็น 5 GHz หรืออยู่ไกล");
+}
+
+void loop() {}
+</script>
+
+<script type="text/plain" class="snipsrc" data-file="TEST_MQTT_Minimal" data-title="MQTT ขั้นต่ำ: publish ทุก 2 วิ + รับทุก topic ของเรา" data-tags="mqtt wifi publish subscribe">
+#include <WiFiS3.h>
+#include <ArduinoMqttClient.h>
+
+char ssid[] = "YOUR_SSID";
+char pass[] = "YOUR_PASS";
+const char broker[] = "phycom.it.kmitl.ac.th";
+const int port = 1883;
+const String SID = "68070006";
+
+WiFiClient net;
+MqttClient mqtt(net);
+
+void onMqttMessage(int size) {
+  String topic = mqtt.messageTopic();
+  String msg = "";
+  while (mqtt.available()) msg += (char)mqtt.read();
+  Serial.print("SUB ");
+  Serial.print(topic);
+  Serial.print(" = ");
+  Serial.println(msg);
+}
+
+void setup() {
+  Serial.begin(115200);
+  while (WiFi.begin(ssid, pass) != WL_CONNECTED) {
+    Serial.print(".");
+    delay(2000);
+  }
+  while (WiFi.localIP() == IPAddress(0, 0, 0, 0)) delay(200);
+  Serial.print("\nIP: ");
+  Serial.println(WiFi.localIP());
+
+  mqtt.setId("R4_" + SID + "_" + String(micros() & 0xFFFF, HEX));
+  while (!mqtt.connect(broker, port)) {
+    Serial.print("MQTT error ");
+    Serial.println(mqtt.connectError());
+    delay(2000);
+  }
+  Serial.println("MQTT OK");
+  mqtt.onMessage(onMqttMessage);
+  mqtt.subscribe(SID + "/#");
+}
+
+void loop() {
+  mqtt.poll();
+  static unsigned long t = 0;
+  static int count = 0;
+  if (millis() - t >= 2000) {
+    t = millis();
+    mqtt.beginMessage(SID + "/test");
+    mqtt.print(count++);
+    mqtt.endMessage();
+    Serial.println("PUB test");
+  }
+}
+</script>
+
+<script type="text/plain" class="snipsrc" data-file="TEST_Button_LED" data-title="ปุ่ม (INPUT_PULLUP) + LED · toggle ด้วย edge detect" data-tags="button led debounce">
+const int PIN_BTN = A2;   // ขาทแยงของปุ่ม: ข้างหนึ่ง → A2, อีกข้าง → GND
+const int PIN_LED1 = 13;   // LED บนบอร์ด
+
+bool ledOn = false;
+
+void setup() {
+  Serial.begin(115200);
+  pinMode(PIN_BTN, INPUT_PULLUP);
+  pinMode(PIN_LED1, OUTPUT);
+}
+
+void loop() {
+  static bool last = HIGH;
+  static unsigned long tChange = 0;
+  bool now = digitalRead(PIN_BTN);
+  if (now != last && millis() - tChange > 30) {   // debounce 30 ms
+    tChange = millis();
+    if (now == LOW) {                              // เพิ่งกด
+      ledOn = !ledOn;
+      digitalWrite(PIN_LED1, ledOn);
+      Serial.println(ledOn ? "LED ON" : "LED OFF");
+    }
+    last = now;
+  }
+}
+</script>
+
+<script type="text/plain" class="snipsrc" data-file="TEST_Potentiometer" data-title="Potentiometer: raw / % / volt" data-tags="pot analog map">
+const int PIN_POT = A0;
+
+void setup() {
+  Serial.begin(115200);
+}
+
+void loop() {
+  int raw = analogRead(PIN_POT);              // 0..1023
+  int pct = map(raw, 0, 1023, 0, 100);
+  float volt = raw * 5.0 / 1023.0;
+  Serial.print("raw=");
+  Serial.print(raw);
+  Serial.print("  %=");
+  Serial.print(pct);
+  Serial.print("  V=");
+  Serial.println(volt, 2);
+  delay(200);
+}
+</script>
+
+<script type="text/plain" class="snipsrc" data-file="TEST_Ultrasonic" data-title="HC-SR04 วัดระยะ cm" data-tags="ultrasonic distance hc-sr04">
+const int PIN_TRIG = 12;
+const int PIN_ECHO = 13;
+
+float readDistanceCM() {
+  digitalWrite(PIN_TRIG, LOW);
+  delayMicroseconds(2);
+  digitalWrite(PIN_TRIG, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(PIN_TRIG, LOW);
+  unsigned long us = pulseIn(PIN_ECHO, HIGH, 25000UL);  // timeout ~4 m
+  if (us == 0) return 999.0;                            // ไม่มี echo
+  return us * 0.0343 / 2.0;
+}
+
+void setup() {
+  Serial.begin(115200);
+  pinMode(PIN_TRIG, OUTPUT);
+  pinMode(PIN_ECHO, INPUT);
+}
+
+void loop() {
+  float cm = readDistanceCM();
+  Serial.print("distance = ");
+  Serial.print(cm, 1);
+  Serial.println(" cm");
+  delay(200);
+}
+</script>
+
+<script type="text/plain" class="snipsrc" data-file="TEST_RGB" data-title="RGB LED วนสี (เช็ก common anode/cathode)" data-tags="rgb led color">
+const int PIN_R = 9, PIN_G = 10, PIN_B = 11;
+const bool COMMON_ANODE = true;   // ถ้าสีที่ขึ้นกลับด้าน ให้เปลี่ยนเป็น false
+
+void rgb(bool r, bool g, bool b) {
+  digitalWrite(PIN_R, (r ^ COMMON_ANODE) ? HIGH : LOW);
+  digitalWrite(PIN_G, (g ^ COMMON_ANODE) ? HIGH : LOW);
+  digitalWrite(PIN_B, (b ^ COMMON_ANODE) ? HIGH : LOW);
+}
+
+void setup() {
+  Serial.begin(115200);
+  pinMode(PIN_R, OUTPUT);
+  pinMode(PIN_G, OUTPUT);
+  pinMode(PIN_B, OUTPUT);
+}
+
+void loop() {
+  Serial.println("RED");    rgb(1, 0, 0); delay(1000);
+  Serial.println("GREEN");  rgb(0, 1, 0); delay(1000);
+  Serial.println("BLUE");   rgb(0, 0, 1); delay(1000);
+  Serial.println("YELLOW"); rgb(1, 1, 0); delay(1000);
+  Serial.println("OFF");    rgb(0, 0, 0); delay(1000);
+}
+</script>
+
+<script type="text/plain" class="snipsrc" data-file="TEST_7Seg_Finder" data-title="7-Seg: หาว่าขาไหนคือ segment ไหน แล้วนับ 0-9" data-tags="7seg segment 7-segment">
+// ต่อ a..g ไปที่ D2..D8 (ไม่แน่ใจลำดับก็ได้) แล้วดู Serial ว่าขาไหนจุด segment ไหน
+const int SEG_PINS[7] = {2, 3, 4, 5, 6, 7, 8};   // a b c d e f g
+const bool COMMON_ANODE = false;
+const byte SEG_DIGITS[10] = {0x3F, 0x06, 0x5B, 0x4F, 0x66, 0x6D, 0x7D, 0x07, 0x7F, 0x6F};
+
+void segWrite(byte pat) {
+  for (int i = 0; i < 7; i++) {
+    bool on = pat & (1 << i);
+    digitalWrite(SEG_PINS[i], (on ^ COMMON_ANODE) ? HIGH : LOW);
+  }
+}
+
+void setup() {
+  Serial.begin(115200);
+  for (int i = 0; i < 7; i++) pinMode(SEG_PINS[i], OUTPUT);
+  // ทีละขา
+  for (int i = 0; i < 7; i++) {
+    segWrite(1 << i);
+    Serial.print("ขา D");
+    Serial.print(SEG_PINS[i]);
+    Serial.print(" ควรเป็น segment ");
+    Serial.println((char)('a' + i));
+    delay(1500);
+  }
+}
+
+void loop() {
+  for (int n = 0; n < 10; n++) {
+    segWrite(SEG_DIGITS[n]);
+    delay(700);
+  }
+}
+</script>
+
+<script type="text/plain" class="snipsrc" data-file="TEST_7Seg_2Digit" data-title="7-Seg 2 หลัก multiplex นับ 00-99 (ไม่ใช้ delay)" data-tags="7seg multiplex 2 digit">
+const int SEG_PINS[7] = {2, 3, 4, 5, 6, 7, 8};   // a..g (ต่อขนานทั้งสองตัว)
+const int DIG_PINS[2] = {A3, A4};                // COM หลักซ้าย, หลักขวา
+const bool COMMON_ANODE = false;                 // CC: digit เปิด = LOW
+const byte SEG_DIGITS[10] = {0x3F, 0x06, 0x5B, 0x4F, 0x66, 0x6D, 0x7D, 0x07, 0x7F, 0x6F};
+
+int value = 0;
+
+void digitEnable(int i, bool on) {
+  digitalWrite(DIG_PINS[i], (on ^ COMMON_ANODE) ? LOW : HIGH);
+}
+
+void segWrite(byte pat) {
+  for (int i = 0; i < 7; i++) {
+    bool on = pat & (1 << i);
+    digitalWrite(SEG_PINS[i], (on ^ COMMON_ANODE) ? HIGH : LOW);
+  }
+}
+
+void segRefresh() {
+  static unsigned long t = 0;
+  static int cur = 0;
+  if (micros() - t < 3000) return;
+  t = micros();
+  digitEnable(0, false);
+  digitEnable(1, false);
+  cur ^= 1;
+  int d = (cur == 0) ? value / 10 : value % 10;
+  segWrite(SEG_DIGITS[d]);
+  digitEnable(cur, true);
+}
+
+void setup() {
+  for (int i = 0; i < 7; i++) pinMode(SEG_PINS[i], OUTPUT);
+  for (int i = 0; i < 2; i++) pinMode(DIG_PINS[i], OUTPUT);
+}
+
+void loop() {
+  segRefresh();                       // เรียกทุกรอบ loop
+  static unsigned long t = 0;
+  if (millis() - t >= 300) {
+    t = millis();
+    value = (value + 1) % 100;
+  }
+}
+</script>
+
+<script type="text/plain" class="snipsrc" data-file="TEST_Keypad_Lib" data-title="Keypad 4x4 (library Keypad)" data-tags="keypad">
+#include <Keypad.h>
+
+const byte ROWS = 4, COLS = 4;
+char keys[ROWS][COLS] = {
+  {'1', '2', '3', 'A'},
+  {'4', '5', '6', 'B'},
+  {'7', '8', '9', 'C'},
+  {'*', '0', '#', 'D'}
+};
+byte rowPins[ROWS] = {9, 8, 7, 6};   // R1..R4
+byte colPins[COLS] = {5, 4, 3, 2};   // C1..C4
+Keypad keypad = Keypad(makeKeymap(keys), rowPins, colPins, ROWS, COLS);
+
+String buf = "";
+
+void setup() {
+  Serial.begin(115200);
+}
+
+void loop() {
+  char k = keypad.getKey();
+  if (!k) return;
+  Serial.print("key: ");
+  Serial.println(k);
+  if (k == '#') {
+    Serial.print("ENTER -> ");
+    Serial.println(buf);
+    buf = "";
+  } else if (k == '*') {
+    buf = "";
+  } else {
+    buf += k;
+  }
+}
+</script>
+
+<script type="text/plain" class="snipsrc" data-file="TEST_Keypad_NoLib" data-title="Keypad 4x4 แบบไม่ใช้ library (เผื่อลง lib ไม่ได้)" data-tags="keypad scan">
+const byte ROW_PINS[4] = {9, 8, 7, 6};
+const byte COL_PINS[4] = {5, 4, 3, 2};
+const char KEYS[4][4] = {
+  {'1', '2', '3', 'A'},
+  {'4', '5', '6', 'B'},
+  {'7', '8', '9', 'C'},
+  {'*', '0', '#', 'D'}
+};
+
+char scanKey() {
+  for (int c = 0; c < 4; c++) {
+    digitalWrite(COL_PINS[c], LOW);
+    delayMicroseconds(5);
+    for (int r = 0; r < 4; r++) {
+      if (digitalRead(ROW_PINS[r]) == LOW) {
+        digitalWrite(COL_PINS[c], HIGH);
+        return KEYS[r][c];
+      }
+    }
+    digitalWrite(COL_PINS[c], HIGH);
+  }
+  return 0;
+}
+
+void setup() {
+  Serial.begin(115200);
+  for (int r = 0; r < 4; r++) pinMode(ROW_PINS[r], INPUT_PULLUP);
+  for (int c = 0; c < 4; c++) {
+    pinMode(COL_PINS[c], OUTPUT);
+    digitalWrite(COL_PINS[c], HIGH);
+  }
+}
+
+void loop() {
+  static char last = 0;
+  static unsigned long t = 0;
+  if (millis() - t < 20) return;   // สแกนทุก 20 ms (debounce)
+  t = millis();
+  char k = scanKey();
+  if (k && k != last) {
+    Serial.print("key: ");
+    Serial.println(k);
+  }
+  last = k;
+}
+</script>
+
+<script type="text/plain" class="snipsrc" data-file="TEST_LCD_Parallel" data-title="LCD 16x2 แบบ parallel (LiquidCrystal)" data-tags="lcd 1602 parallel">
+#include <LiquidCrystal.h>
+
+//               RS  E  D4 D5 D6 D7
+LiquidCrystal lcd(12, 11, 5, 4, 3, 2);   // RW → GND, V0 → pot/R ลง GND
+
+void setup() {
+  lcd.begin(16, 2);
+  lcd.print("Hello Phycom!");
+}
+
+void loop() {
+  lcd.setCursor(0, 1);
+  lcd.print("t=");
+  lcd.print(millis() / 1000);
+  lcd.print("s   ");      // เติมช่องว่างลบตัวเก่า
+  delay(200);
+}
+</script>
+
+<script type="text/plain" class="snipsrc" data-file="TEST_I2C_Scanner" data-title="I2C scanner (หา address LCD I2C)" data-tags="i2c lcd scanner">
+#include <Wire.h>
+
+void setup() {
+  Serial.begin(115200);
+  while (!Serial && millis() < 3000) {}
+  Wire.begin();
+  Serial.println("Scanning I2C (SDA=A4, SCL=A5)...");
+  int found = 0;
+  for (byte a = 1; a < 127; a++) {
+    Wire.beginTransmission(a);
+    if (Wire.endTransmission() == 0) {
+      Serial.print("found 0x");
+      Serial.println(a, HEX);
+      found++;
+    }
+  }
+  if (!found) Serial.println("ไม่เจอ: เช็ก SDA/SCL/VCC");
+}
+
+void loop() {}
+</script>
+
+<script type="text/plain" class="snipsrc" data-file="TEST_LCD_I2C" data-title="LCD 16x2 แบบ I2C (LiquidCrystal_I2C)" data-tags="lcd i2c">
+#include <Wire.h>
+#include <LiquidCrystal_I2C.h>
+
+LiquidCrystal_I2C lcd(0x27, 16, 2);   // ไม่ขึ้นลอง 0x3F
+
+void setup() {
+  lcd.init();
+  lcd.backlight();
+  lcd.print("Hello I2C LCD");
+}
+
+void loop() {
+  lcd.setCursor(0, 1);
+  lcd.print(millis() / 1000);
+  lcd.print("   ");
+  delay(200);
+}
+</script>
+
+<script type="text/plain" class="snipsrc" data-file="TEST_DHT" data-title="DHT11 / DHT22 อุณหภูมิ + ความชื้น" data-tags="dht temp humidity temperature">
+#include <DHT.h>
+
+const int PIN_DHT = A1;
+DHT dht(PIN_DHT, DHT11);   // หรือ DHT22
+
+void setup() {
+  Serial.begin(115200);
+  dht.begin();
+}
+
+void loop() {
+  float t = dht.readTemperature();
+  float h = dht.readHumidity();
+  if (isnan(t) || isnan(h)) {
+    Serial.println("อ่าน DHT ไม่ได้ (เช็กชนิด/สาย)");
+  } else {
+    Serial.print("T=");
+    Serial.print(t, 1);
+    Serial.print(" C  H=");
+    Serial.print(h, 0);
+    Serial.println(" %");
+  }
+  delay(2000);
+}
+</script>
+
+<script type="text/plain" class="snipsrc" data-file="TEST_Thermistor" data-title="Thermistor NTC 10k → °C (เช็กทิศการต่อ)" data-tags="thermistor ntc temp temperature">
+const int PIN_TEMP = A1;
+const float R_FIXED = 10000.0;   // R ที่ต่ออนุกรม
+const float R_NOM = 10000.0;     // NTC ที่ 25 °C
+const float BETA = 3950.0;       // ไม่ตรงลอง 3435
+
+float toC(float r) {
+  return 1.0 / (1.0 / 298.15 + log(r / R_NOM) / BETA) - 273.15;
+}
+
+void setup() {
+  Serial.begin(115200);
+}
+
+void loop() {
+  long sum = 0;
+  for (int i = 0; i < 10; i++) sum += analogRead(PIN_TEMP);
+  float adc = sum / 10.0;
+  if (adc < 1) adc = 1;
+  if (adc > 1022) adc = 1022;
+  // แบบ A: 5V -> R -> A1 -> NTC -> GND
+  float rA = R_FIXED * adc / (1023.0 - adc);
+  // แบบ B: 5V -> NTC -> A1 -> R -> GND
+  float rB = R_FIXED * (1023.0 - adc) / adc;
+  Serial.print("adc=");  Serial.print(adc, 0);
+  Serial.print("  A: "); Serial.print(toC(rA), 1);
+  Serial.print(" C   B: "); Serial.print(toC(rB), 1);
+  Serial.println(" C   <- จับ NTC แล้วแบบไหนค่าขึ้น ~25-35 = แบบนั้น");
+  delay(500);
+}
+</script>
+
+<script type="text/plain" class="snipsrc" data-file="TEST_LM35" data-title="LM35 / TMP36 / NTC อุณหภูมิแบบ analog" data-tags="lm35 tmp36 ntc thermistor temp temperature">
+const int PIN_TEMP = A1;
+
+float readVolt() {
+  long sum = 0;
+  for (int i = 0; i < 10; i++) sum += analogRead(PIN_TEMP);
+  return (sum / 10.0) * 5.0 / 1023.0;
+}
+
+void setup() {
+  Serial.begin(115200);
+}
+
+void loop() {
+  float v = readVolt();
+  float lm35 = v * 100.0;             // LM35: 10 mV/°C
+  float tmp36 = (v - 0.5) * 100.0;    // TMP36
+  // NTC 10k: 5V → R10k → A1 → NTC → GND
+  float adc = v / 5.0 * 1023.0;
+  float rNtc = 10000.0 * adc / (1023.0 - adc);
+  float ntc = 1.0 / (1.0 / 298.15 + log(rNtc / 10000.0) / 3950.0) - 273.15;
+  Serial.print("V=");     Serial.print(v, 3);
+  Serial.print(" LM35="); Serial.print(lm35, 1);
+  Serial.print(" TMP36=");Serial.print(tmp36, 1);
+  Serial.print(" NTC=");  Serial.println(ntc, 1);
+  delay(500);
+}
+</script>
+
+<script type="text/plain" class="snipsrc" data-file="TEST_Buzzer" data-title="Buzzer beep / tone" data-tags="buzzer tone sound">
+const int PIN_BUZ = 1;
+
+void setup() {
+  pinMode(PIN_BUZ, OUTPUT);
+}
+
+void loop() {
+  tone(PIN_BUZ, 1000, 200);   // passive buzzer: ความถี่ 1 kHz 200 ms
+  delay(500);
+  tone(PIN_BUZ, 1500, 200);
+  delay(1500);
+  // active buzzer: digitalWrite(PIN_BUZ, HIGH); delay(200); digitalWrite(PIN_BUZ, LOW);
+}
+</script>
+
+<script type="text/plain" class="snipsrc" data-file="" data-title="Pattern: state machine + millis (เช่น ไฟจราจร ไม่ block)" data-tags="millis state machine traffic">
+enum State { RED, GREEN, YELLOW };
+State state = RED;
+unsigned long tState = 0;
+
+void setState(State s) {
+  state = s;
+  tState = millis();
+}
+
+void loop() {
+  mqtt.poll();                       // ยังรับ MQTT ได้ตลอด
+  unsigned long dt = millis() - tState;
+  switch (state) {
+    case RED:    rgbColor(1, 0, 0); if (dt >= 3000) setState(GREEN);  break;
+    case GREEN:  rgbColor(0, 1, 0); if (dt >= 3000) setState(YELLOW); break;
+    case YELLOW: rgbColor(1, 1, 0); if (dt >= 1000) setState(RED);    break;
+  }
+}
+</script>
+
+<script type="text/plain" class="snipsrc" data-file="" data-title="Pattern: รหัสผ่านจาก Keypad → เทียบ → แสดง LCD + publish" data-tags="keypad password lcd">
+const String PASSWORD = "1234";
+String input = "";
+
+void handleKey(char k) {
+  if (k == '#') {
+    bool ok = (input == PASSWORD);
+    lcdPrintRow(1, ok ? "ACCESS GRANTED" : "WRONG PASSWORD");
+    publish("door", ok ? "open" : "close");
+    input = "";
+  } else if (k == '*') {
+    input = "";
+    lcdPrintRow(1, "");
+  } else {
+    input += k;
+    String stars = "";
+    for (unsigned i = 0; i < input.length(); i++) stars += '*';
+    lcdPrintRow(0, "PIN: " + stars);
+  }
+}
+</script>
+
+<script type="text/plain" class="snipsrc" data-file="" data-title="Pattern: รับคำสั่งหลายแบบใน topic เดียว (เช่น “led:on”, “num:42”)" data-tags="parse string command">
+// ใน onMqttMessage หลัง msg.trim();
+int c = msg.indexOf(':');
+if (c > 0) {
+  String cmd = msg.substring(0, c);
+  String arg = msg.substring(c + 1);
+  cmd.toLowerCase();
+  if (cmd == "led")      ledWrite(arg.equalsIgnoreCase("on"));
+  else if (cmd == "num") segShowNumber(arg.toInt());
+  else if (cmd == "lcd") lcdPrintRow(0, arg);
+}
+</script>
+
+<!-- ======================= APP ======================= -->
+<script id="gen">
+/*GEN-START*/
+const PWM_PINS = ['3','5','6','9','10','11'];
+const SEG_KEYS = ['a','b','c','d','e','f','g'];
+const KP_KEYS = ['R1','R2','R3','R4','C1','C2','C3','C4'];
+
+function normPin(p){
+  p = String(p == null ? '' : p).trim().toUpperCase();
+  if (/^D\d+$/.test(p)) p = p.slice(1);
+  if (/^\d+$/.test(p)) { const n = +p; if (n >= 14 && n <= 19) return 'A' + (n - 14); if (n <= 13) return String(n); return null; }
+  if (/^A[0-5]$/.test(p)) return p;
+  return null;
+}
+function pinLabel(p){ const n = normPin(p); return n == null ? String(p) : (/^A/.test(n) ? n : 'D' + n); }
+function cPin(p){ const n = normPin(p); return n == null ? '/*BAD PIN ' + p + '*/0' : n; }
+
+const HW_DEF = {
+  rgb:    {label:'RGB LED'},
+  led:    {label:'LED'},
+  buzzer: {label:'Buzzer'},
+  btn:    {label:'Push button'},
+  pot:    {label:'Potentiometer'},
+  ultra:  {label:'Ultrasonic HC-SR04'},
+  temp:   {label:'Temperature sensor'},
+  seg:    {label:'7-Segment'},
+  lcd:    {label:'LCD 16x2'},
+  keypad: {label:'Keypad 4x4'},
+};
+
+// [key, value, editable]
+function hwPinList(name, h){
+  switch (name) {
+    case 'rgb': return [['R',h.R,1],['G',h.G,1],['B',h.B,1]];
+    case 'led': return [['LED',h.LED,1]];
+    case 'buzzer': return [['BUZ',h.BUZ,1]];
+    case 'btn': return [['BTN',h.BTN,1]];
+    case 'pot': return [['POT',h.POT,1]];
+    case 'ultra': return [['TRIG',h.TRIG,1],['ECHO',h.ECHO,1]];
+    case 'temp': return [['TEMP',h.TEMP,1]];
+    case 'seg': {
+      let l = SEG_KEYS.map(k => [k, h[k], 1]);
+      if (+h.digits === 2) {
+        if (h.mode === 'mux') l.push(['DIG1', h.DIG1, 1], ['DIG2', h.DIG2, 1]);
+        else l = l.concat(SEG_KEYS.map(k => [k + '2', h[k + '2'], 1]));
+      }
+      return l;
+    }
+    case 'lcd': return h.type === 'i2c' ? [['SDA','A4',0],['SCL','A5',0]] : ['RS','E','D4','D5','D6','D7'].map(k => [k, h[k], 1]);
+    case 'keypad': return KP_KEYS.map(k => [k, h[k], 1]);
+  }
+  return [];
+}
+
+const SRC_OPTS = [['pot','Potentiometer (0-1023)'],['dist','Ultrasonic (cm)'],['temp','อุณหภูมิ (°C)'],['hum','ความชื้น % (DHT)']];
+const OP_OPTS = [['>','>'],['>=','>='],['<','<'],['<=','<='],['==','=='],['!=','!=']];
+const SHOW_OPTS = [['none','— ไม่แสดง'],['lcd0','LCD แถว 1'],['lcd1','LCD แถว 2'],['seg','7-Segment']];
+const SHOW_LCD = [['none','— ไม่แสดง'],['lcd0','LCD แถว 1'],['lcd1','LCD แถว 2']];
+const TARGET_OPTS = [['led','LED'],['buzzer','Buzzer'],['rgbR','RGB แดง'],['rgbG','RGB เขียว'],['rgbB','RGB น้ำเงิน']];
+const PWM_TARGETS = [['led','LED (ต้องเป็นขา PWM)'],['rgbR','RGB แดง'],['rgbG','RGB เขียว'],['rgbB','RGB น้ำเงิน']];
+
+const TASK_DEF = {
+  P_VALUE:  {dir:'pub', label:'PUB ค่า sensor (ตัวเลข)', def:{topic:'light', src:'pot', dec:0, mapOn:false, mapMin:0, mapMax:100, show:'none'},
+             fields:[['src','select','แหล่งค่า',SRC_OPTS],['dec','number','ทศนิยม'],['mapOn','check','map ช่วงใหม่ (pot)'],['mapMin','number','map min'],['mapMax','number','map max'],['show','select','แสดงบนบอร์ด',SHOW_OPTS]]},
+  P_THRESH: {dir:'pub', label:'PUB ข้อความตามเงื่อนไข', def:{topic:'food', src:'dist', op:'>', thr:20, btn:false, t:'off', f:'on', show:'none'},
+             fields:[['src','select','ถ้า',SRC_OPTS],['op','select','',OP_OPTS],['thr','number','ค่า'],['btn','check','AND กดปุ่มอยู่'],['t','text','จริง → ส่ง'],['f','text','ไม่จริง → ส่ง'],['show','select','แสดงบนบอร์ด',SHOW_LCD]]},
+  P_BUTTON: {dir:'pub', label:'PUB สถานะปุ่ม', def:{topic:'button', p:'pressed', r:'released', show:'none'},
+             fields:[['p','text','กด → ส่ง'],['r','text','ปล่อย → ส่ง'],['show','select','แสดงบนบอร์ด',SHOW_LCD]]},
+  P_KEYPAD: {dir:'pub', label:'PUB Keypad', def:{topic:'key', mode:'enter', show:'lcd0'},
+             fields:[['mode','select','โหมด',[['each','ส่งทุกปุ่มที่กด'],['enter','พิมพ์ แล้วกด # ส่ง (* = ลบ)']]],['show','select','แสดงที่พิมพ์',SHOW_LCD]]},
+  S_RGB:    {dir:'sub', label:'SUB ตัวเลข → สี RGB ตามช่วง', def:{topic:'venus', ranges:'36-50:R\n26-35:B\n10-25:G'},
+             fields:[['ranges','textarea','ช่วง:สี บรรทัดละ 1 (สี R G B Y C M W, รองรับ >=40 / <10)']]},
+  S_SEG:    {dir:'sub', label:'SUB ตัวเลข → 7-Segment', def:{topic:'prob_stat'}, fields:[]},
+  S_LCD:    {dir:'sub', label:'SUB ข้อความ → LCD', def:{topic:'message', row:'0', prefix:''},
+             fields:[['row','select','แถว',[['0','แถว 1'],['1','แถว 2']]],['prefix','text','ข้อความนำหน้า']]},
+  S_ONOFF:  {dir:'sub', label:'SUB on/off → LED/Buzzer', def:{topic:'led', target:'led', on:'on', off:'off'},
+             fields:[['target','select','อุปกรณ์',TARGET_OPTS],['on','text','ข้อความเปิด'],['off','text','ข้อความปิด']]},
+  S_THRESH: {dir:'sub', label:'SUB ตัวเลข → เปิดถ้าเข้าเงื่อนไข', def:{topic:'alarm', op:'>', thr:50, target:'led'},
+             fields:[['op','select','ถ้าค่า',OP_OPTS],['thr','number','ค่า'],['target','select','เปิด',TARGET_OPTS]]},
+  S_PWM:    {dir:'sub', label:'SUB ตัวเลข → ความสว่าง (PWM)', def:{topic:'bright', max:255, target:'led'},
+             fields:[['max','number','ค่าสูงสุดที่รับ (เช่น 100 หรือ 255)'],['target','select','อุปกรณ์',PWM_TARGETS]]},
+};
+
+function defaultHW(){
+  return {
+    rgb:    {on:false, R:'9', G:'10', B:'11', anode:true},
+    led:    {on:false, LED:'A5'},
+    buzzer: {on:false, BUZ:'1', passive:true},
+    btn:    {on:false, BTN:'A2'},
+    pot:    {on:false, POT:'A0'},
+    ultra:  {on:false, TRIG:'12', ECHO:'13'},
+    temp:   {on:false, TEMP:'A1', type:'NTC', ntcTop:false, beta:3950, rNom:10000, rFix:10000},
+    seg:    {on:false, digits:1, mode:'mux', anode:false, a:'2', b:'3', c:'4', d:'5', e:'6', f:'7', g:'8', DIG1:'A3', DIG2:'A4',
+             a2:'0', b2:'1', c2:'9', d2:'10', e2:'11', f2:'A3', g2:'A4', blank:true},
+    lcd:    {on:false, type:'parallel', addr:'0x27', RS:'12', E:'11', D4:'5', D5:'4', D6:'3', D7:'2'},
+    keypad: {on:false, R1:'9', R2:'8', R3:'7', R4:'6', C1:'5', C2:'4', C3:'3', C4:'2'},
+  };
+}
+function mkTask(type, over){ return Object.assign({type}, JSON.parse(JSON.stringify(TASK_DEF[type].def)), over || {}); }
+function defaultCfg(){ return {sid:'68070006', ssid:'YOUR_SSID', pass:'YOUR_PASS', broker:'phycom.it.kmitl.ac.th', port:1883, user:'', mpass:'', pubMs:1000}; }
+
+const PRESETS = {
+  mock: {label:'✅ Mock Exam (เฉลย)', make(){
+    const hw = defaultHW();
+    return {cfg:defaultCfg(), hw, tasks:[
+      mkTask('P_VALUE', {topic:'temp', src:'temp', dec:1}),
+      mkTask('P_VALUE', {topic:'light', src:'pot', dec:0}),
+      mkTask('P_THRESH', {topic:'food', src:'dist', op:'>', thr:20, t:'off', f:'on'}),
+      mkTask('P_THRESH', {topic:'door', src:'dist', op:'>=', thr:20, btn:true, t:'On', f:'Off'}),
+      mkTask('S_RGB', {topic:'venus', ranges:'36-50:R\n26-35:B\n10-25:G'}),
+      mkTask('S_SEG', {topic:'prob_stat'}),
+    ]};
+  }},
+  pracA: {label:'ฝึก A: Keypad+LCD+Pot', make(){
+    const hw = defaultHW();
+    Object.assign(hw.keypad, {R1:'9', R2:'8', R3:'7', R4:'6', C1:'5', C2:'4', C3:'3', C4:'2'});
+    Object.assign(hw.lcd, {type:'parallel', RS:'10', E:'11', D4:'12', D5:'13', D6:'A1', D7:'A2'});
+    return {cfg:defaultCfg(), hw, tasks:[
+      mkTask('P_KEYPAD', {topic:'key', mode:'enter', show:'lcd0'}),
+      mkTask('S_LCD', {topic:'message', row:'1', prefix:''}),
+      mkTask('P_VALUE', {topic:'light', src:'pot', dec:0}),
+    ]};
+  }},
+  pracB: {label:'ฝึก B: Ultrasonic+7seg 2 หลัก', make(){
+    const hw = defaultHW();
+    Object.assign(hw.seg, {digits:2, mode:'mux'});
+    return {cfg:defaultCfg(), hw, tasks:[
+      mkTask('P_VALUE', {topic:'distance', src:'dist', dec:1}),
+      mkTask('P_THRESH', {topic:'level', src:'pot', op:'>', thr:512, t:'high', f:'low'}),
+      mkTask('S_SEG', {topic:'number'}),
+    ]};
+  }},
+  blank: {label:'ว่าง', make(){ return {cfg:defaultCfg(), hw:defaultHW(), tasks:[]}; }},
+};
+
+function taskNeeds(t){
+  const n = new Set();
+  const S = {pot:'pot', dist:'ultra', temp:'temp', hum:'temp'};
+  if (t.type === 'P_VALUE' || t.type === 'P_THRESH') { n.add(S[t.src]); if (t.type === 'P_THRESH' && t.btn) n.add('btn'); }
+  if (t.type === 'P_BUTTON') n.add('btn');
+  if (t.type === 'P_KEYPAD') n.add('keypad');
+  if (t.show && String(t.show).startsWith('lcd')) n.add('lcd');
+  if (t.show === 'seg') n.add('seg');
+  if (t.type === 'S_RGB') n.add('rgb');
+  if (t.type === 'S_SEG') n.add('seg');
+  if (t.type === 'S_LCD') n.add('lcd');
+  if (['S_ONOFF','S_THRESH','S_PWM'].includes(t.type)) n.add(String(t.target).startsWith('rgb') ? 'rgb' : t.target);
+  return n;
+}
+function usedHW(st){
+  const u = new Set();
+  st.tasks.forEach(t => taskNeeds(t).forEach(x => u.add(x)));
+  Object.keys(st.hw).forEach(k => { if (st.hw[k].on) u.add(k); });
+  return u;
+}
+function topicSuffix(st, t){
+  let s = String(t.topic || '').trim();
+  const pre = String(st.cfg.sid).trim() + '/';
+  if (s.startsWith(pre)) s = s.slice(pre.length);
+  return s;
+}
+function cstr(s){ return JSON.stringify(String(s == null ? '' : s)); }
+function num(v, d){ const x = parseFloat(v); return isNaN(x) ? (d || 0) : x; }
+
+function checkState(st){
+  const w = [];
+  const used = usedHW(st);
+  const owner = {};
+  used.forEach(name => {
+    hwPinList(name, st.hw[name]).forEach(([k, v]) => {
+      const n = normPin(v);
+      if (n == null) { w.push(`${HW_DEF[name].label}: ขา ${k} = "${v}" ไม่ถูกต้อง (ใช้ 0–13 หรือ A0–A5)`); return; }
+      (owner[n] = owner[n] || []).push(`${HW_DEF[name].label}.${k}`);
+    });
+  });
+  Object.keys(owner).forEach(p => { if (owner[p].length > 1) w.push(`ขาชนกัน ${pinLabel(p)}: ${owner[p].join(', ')}`); });
+  const total = Object.keys(owner).length;
+  if (used.has('pot') && !/^A/.test(normPin(st.hw.pot.POT) || '')) w.push('Potentiometer ต้องอยู่ขา A0–A5');
+  if (used.has('temp') && st.hw.temp.type !== 'DHT11' && st.hw.temp.type !== 'DHT22' && !/^A/.test(normPin(st.hw.temp.TEMP) || '')) w.push('Sensor อุณหภูมิแบบ analog ต้องอยู่ขา A0–A5');
+  const seen = {};
+  st.tasks.forEach((t, i) => {
+    const tp = topicSuffix(st, t);
+    if (!tp) w.push(`ข้อ ${i + 1}: ยังไม่ใส่ topic`);
+    const key = TASK_DEF[t.type].dir + ':' + tp;
+    if (tp && seen[key]) w.push(`ข้อ ${i + 1}: topic "${tp}" ซ้ำกับข้อ ${seen[key]}`);
+    seen[key] = i + 1;
+    if (t.src === 'hum' && !/^DHT/.test(st.hw.temp.type)) w.push(`ข้อ ${i + 1}: ความชื้นต้องใช้ DHT11/DHT22`);
+    if (t.type === 'S_PWM' && t.target === 'led' && !PWM_PINS.includes(normPin(st.hw.led.LED))) w.push(`ข้อ ${i + 1}: LED ต้องอยู่ขา PWM (3,5,6,9,10,11)`);
+    if (t.type === 'S_PWM' && String(t.target).startsWith('rgb')) {
+      const ch = {rgbR:'R', rgbG:'G', rgbB:'B'}[t.target];
+      if (!PWM_PINS.includes(normPin(st.hw.rgb[ch]))) w.push(`ข้อ ${i + 1}: RGB ${ch} ต้องอยู่ขา PWM (3,5,6,9,10,11)`);
+    }
+    if (t.type === 'S_RGB') parseRanges(t.ranges).errors.forEach(e => w.push(`ข้อ ${i + 1}: ${e}`));
+  });
+  if (!st.cfg.ssid || st.cfg.ssid === 'YOUR_SSID') w.push('ยังไม่ใส่ WiFi SSID / Password');
+  return {warnings:w, pinCount:total, owner};
+}
+
+const COLOR_MAP = {R:[1,0,0], RED:[1,0,0], 'แดง':[1,0,0], G:[0,1,0], GREEN:[0,1,0], 'เขียว':[0,1,0], B:[0,0,1], BLUE:[0,0,1], 'ฟ้า':[0,0,1], 'น้ำเงิน':[0,0,1],
+  Y:[1,1,0], YELLOW:[1,1,0], 'เหลือง':[1,1,0], C:[0,1,1], CYAN:[0,1,1], M:[1,0,1], MAGENTA:[1,0,1], PURPLE:[1,0,1], 'ม่วง':[1,0,1], W:[1,1,1], WHITE:[1,1,1], 'ขาว':[1,1,1], OFF:[0,0,0], 'ดับ':[0,0,0]};
+const COLOR_NAME = c => ({'100':'แดง','010':'เขียว','001':'น้ำเงิน/ฟ้า','110':'เหลือง','011':'ฟ้าอมเขียว','101':'ม่วง','111':'ขาว','000':'ดับ'})[c.join('')];
+function parseRanges(text){
+  const out = [], errors = [];
+  String(text || '').split(/\n|;/).map(s => s.trim()).filter(Boolean).forEach(line => {
+    const m = line.match(/^(.*?)\s*[:=]\s*(\S+)\s*$/) || line.match(/^(.*?)\s*(?:→|->)\s*(\S+)\s*$/);
+    if (!m) { errors.push(`อ่านบรรทัด "${line}" ไม่ได้ (รูปแบบ 36-50:R)`); return; }
+    const cond = m[1].replace(/\s/g, '').replace(/–/g, '-');
+    const color = COLOR_MAP[m[2].toUpperCase()] || COLOR_MAP[m[2]];
+    if (!color) { errors.push(`ไม่รู้จักสี "${m[2]}"`); return; }
+    let expr = null, mm;
+    if ((mm = cond.match(/^(-?\d+(?:\.\d+)?)-(-?\d+(?:\.\d+)?)$/))) expr = `v >= ${mm[1]} && v <= ${mm[2]}`;
+    else if ((mm = cond.match(/^(>=|<=|>|<|==)(-?\d+(?:\.\d+)?)$/))) expr = `v ${mm[1]} ${mm[2]}`;
+    else if ((mm = cond.match(/^(-?\d+(?:\.\d+)?)$/))) expr = `v == ${mm[1]}`;
+    if (!expr) { errors.push(`เงื่อนไข "${m[1]}" ไม่ถูก (ใช้ 10-25, >=40, <10)`); return; }
+    out.push({expr, color, line});
+  });
+  return {ranges:out, errors};
+}
+
+function describeTask(st, t){
+  const tp = st.cfg.sid + '/' + topicSuffix(st, t);
+  const S = {pot:'Potentiometer', dist:'ระยะ Ultrasonic (cm)', temp:'อุณหภูมิ', hum:'ความชื้น'};
+  switch (t.type) {
+    case 'P_VALUE': return `PUB ${tp} : ${S[t.src]}` + (t.src === 'pot' && t.mapOn ? ` map→${t.mapMin}..${t.mapMax}` : '');
+    case 'P_THRESH': return `PUB ${tp} : ถ้า ${S[t.src]} ${t.op} ${t.thr}${t.btn ? ' และกดปุ่ม' : ''} → "${t.t}" ไม่งั้น "${t.f}"`;
+    case 'P_BUTTON': return `PUB ${tp} : ปุ่มกด → "${t.p}", ปล่อย → "${t.r}"`;
+    case 'P_KEYPAD': return `PUB ${tp} : Keypad ` + (t.mode === 'each' ? 'ทุกปุ่ม' : 'พิมพ์แล้ว # ส่ง, * ลบ');
+    case 'S_RGB': return `SUB ${tp} : ` + parseRanges(t.ranges).ranges.map(r => `${r.line}`).join(', ');
+    case 'S_SEG': return `SUB ${tp} : ตัวเลข → 7-Segment ${+st.hw.seg.digits === 2 ? '(0-99)' : '(0-9)'}`;
+    case 'S_LCD': return `SUB ${tp} : ข้อความ → LCD แถว ${+t.row + 1}`;
+    case 'S_ONOFF': return `SUB ${tp} : "${t.on}"/"${t.off}" → ${t.target}`;
+    case 'S_THRESH': return `SUB ${tp} : ถ้าค่า ${t.op} ${t.thr} → เปิด ${t.target} ไม่งั้นปิด`;
+    case 'S_PWM': return `SUB ${tp} : 0..${t.max} → ความสว่าง ${t.target}`;
+  }
+  return t.type;
+}
+
+function outCode(target, cond){
+  if (target === 'led') return `ledWrite(${cond});`;
+  if (target === 'buzzer') return `buzzerWrite(${cond});`;
+  const ch = {rgbR:0, rgbG:1, rgbB:2}[target];
+  return `rgbSet(${ch}, ${cond});`;
+}
+
+function generate(st){
+  const c = st.cfg, H = st.hw, T = st.tasks;
+  const used = usedHW(st);
+  const has = k => used.has(k);
+  const L = [];
+  const p = (s = '') => L.push(s);
+  const isDHT = /^DHT/.test(H.temp.type);
+  const seg2 = +H.seg.digits === 2;
+  const libs = ['WiFiS3 (มากับ board)', 'ArduinoMqttClient'];
+  if (has('keypad')) libs.push('Keypad (Mark Stanley)');
+  if (has('lcd')) libs.push(H.lcd.type === 'i2c' ? 'LiquidCrystal I2C (Frank de Brabander)' : 'LiquidCrystal (มากับ IDE)');
+  if (has('temp') && isDHT) libs.push('DHT sensor library + Adafruit Unified Sensor');
+
+  p('/*');
+  p(' * Physical Computing — MQTT exam sketch');
+  p(' * Board: Arduino UNO R4 WiFi   |   Serial Monitor: 115200');
+  p(' * Libraries: ' + libs.join(', '));
+  p(' *');
+  p(' * Tasks:');
+  T.forEach((t, i) => p(` *  [${i + 1}] ${describeTask(st, t)}`));
+  p(' *');
+  p(' * Wiring:');
+  const wiringLines = [];
+  used.forEach(name => {
+    const pins = hwPinList(name, H[name]).map(([k, v]) => `${k}->${pinLabel(v)}`).join(', ');
+    let extra = '';
+    if (name === 'ultra') extra = ' | VCC->5V GND->GND';
+    if (name === 'btn') extra = ' | ขาทแยงอีกข้าง->GND (INPUT_PULLUP, กด=LOW)';
+    if (name === 'pot') extra = ' | ขาข้าง->5V/GND';
+    if (name === 'rgb') extra = H.rgb.anode ? ' | ขายาว->5V (common anode) + R220 ทุกสี' : ' | ขายาว->GND (common cathode) + R220 ทุกสี';
+    if (name === 'seg') extra = (H.seg.anode ? ' | common anode' : ' | common cathode') + (seg2 && H.seg.mode === 'mux' ? ', a-g ต่อขนาน 2 ตัว, COM แต่ละตัว->DIG1/DIG2' : (seg2 ? '' : (H.seg.anode ? ', COM->5V' : ', COM->GND'))) + ', R220-1k ทุก segment';
+    if (name === 'lcd') extra = H.lcd.type === 'i2c' ? ` | addr ${H.lcd.addr}, VCC->5V` : ' | VSS,RW,K->GND  VDD,A->5V  V0->pot/R1k->GND';
+    if (name === 'temp') extra = ' | ' + (H.temp.type === 'NTC' ? (H.temp.ntcTop ? 'NTC: 5V -> NTC -> PIN -> R' + H.temp.rFix + ' -> GND' : 'NTC: 5V -> R' + H.temp.rFix + ' -> PIN -> NTC -> GND') : H.temp.type);
+    if (name === 'keypad') extra = ' | สายซ้าย->ขวา = R1..R4,C1..C4';
+    p(` *  ${HW_DEF[name].label}: ${pins}${extra}`);
+    wiringLines.push(`${HW_DEF[name].label}: ${pins}`);
+  });
+  p(' */');
+  p('#include <WiFiS3.h>');
+  p('#include <ArduinoMqttClient.h>');
+  if (has('keypad')) p('#include <Keypad.h>');
+  if (has('lcd')) { if (H.lcd.type === 'i2c') { p('#include <Wire.h>'); p('#include <LiquidCrystal_I2C.h>'); } else p('#include <LiquidCrystal.h>'); }
+  if (has('temp') && isDHT) p('#include <DHT.h>');
+  p();
+  p('// ================== CONFIG (แก้ตรงนี้) ==================');
+  p(`char ssid[] = ${cstr(c.ssid)};`);
+  p(`char pass[] = ${cstr(c.pass)};`);
+  p(`const char broker[] = ${cstr(c.broker)};`);
+  p(`const int  port = ${parseInt(c.port) || 1883};`);
+  if (c.user) { p(`const char mqttUser[] = ${cstr(c.user)};`); p(`const char mqttPass[] = ${cstr(c.mpass)};`); }
+  p(`const String SID = ${cstr(String(c.sid).trim())};     // รหัสนักศึกษา = prefix ของ topic`);
+  p(`const unsigned long PUB_INTERVAL = ${parseInt(c.pubMs) || 1000};   // ms ส่งค่าซ้ำทุกๆ`);
+  p('const unsigned long SENSE_INTERVAL = 100;   // ms อ่าน sensor ทุกๆ');
+  p('const bool DEBUG = true;                     // พิมพ์สถานะทั้งหมดใน Serial');
+  p('const unsigned long DEBUG_INTERVAL = 1000;   // ms');
+  p();
+  p('// ================== PINS ==================');
+  if (has('rgb')) { p(`const int PIN_R = ${cPin(H.rgb.R)}, PIN_G = ${cPin(H.rgb.G)}, PIN_B = ${cPin(H.rgb.B)};`); p(`const bool RGB_COMMON_ANODE = ${H.rgb.anode ? 'true' : 'false'};   // true: LOW = ติด`); }
+  if (has('led')) p(`const int PIN_LED1 = ${cPin(H.led.LED)};`);
+  if (has('buzzer')) p(`const int PIN_BUZ = ${cPin(H.buzzer.BUZ)};`);
+  if (has('btn')) p(`const int PIN_BTN = ${cPin(H.btn.BTN)};   // INPUT_PULLUP: กด = LOW`);
+  if (has('pot')) p(`const int PIN_POT = ${cPin(H.pot.POT)};`);
+  if (has('ultra')) p(`const int PIN_TRIG = ${cPin(H.ultra.TRIG)}, PIN_ECHO = ${cPin(H.ultra.ECHO)};`);
+  if (has('temp')) p(`const int PIN_TEMP = ${cPin(H.temp.TEMP)};   // ${H.temp.type}`);
+  if (has('seg')) {
+    p(`const int SEG_PINS[7] = {${SEG_KEYS.map(k => cPin(H.seg[k])).join(', ')}};   // a b c d e f g`);
+    if (seg2 && H.seg.mode === 'mux') p(`const int DIG_PINS[2] = {${cPin(H.seg.DIG1)}, ${cPin(H.seg.DIG2)}};   // COM หลักซ้าย (สิบ), หลักขวา (หน่วย)`);
+    if (seg2 && H.seg.mode !== 'mux') p(`const int SEG2_PINS[7] = {${SEG_KEYS.map(k => cPin(H.seg[k + '2'])).join(', ')}};   // หลักหน่วย a..g (SEG_PINS = หลักสิบ)`);
+    p(`const bool SEG_COMMON_ANODE = ${H.seg.anode ? 'true' : 'false'};`);
+  }
+  if (has('keypad')) {
+    p("char keys[4][4] = {{'1','2','3','A'}, {'4','5','6','B'}, {'7','8','9','C'}, {'*','0','#','D'}};");
+    p(`byte rowPins[4] = {${['R1','R2','R3','R4'].map(k => cPin(H.keypad[k])).join(', ')}};   // R1..R4`);
+    p(`byte colPins[4] = {${['C1','C2','C3','C4'].map(k => cPin(H.keypad[k])).join(', ')}};   // C1..C4`);
+    p('Keypad keypad = Keypad(makeKeymap(keys), rowPins, colPins, 4, 4);');
+  }
+  if (has('lcd')) {
+    if (H.lcd.type === 'i2c') p(`LiquidCrystal_I2C lcd(${/^0x[0-9a-f]+$/i.test(H.lcd.addr) ? H.lcd.addr : '0x27'}, 16, 2);   // ไม่ขึ้น ลอง 0x3F`);
+    else p(`LiquidCrystal lcd(${['RS','E','D4','D5','D6','D7'].map(k => cPin(H.lcd[k])).join(', ')});   // RS, E, D4, D5, D6, D7`);
+  }
+  if (has('temp') && isDHT) p(`DHT dht(PIN_TEMP, ${H.temp.type});`);
+  p();
+  p('WiFiClient net;');
+  p('MqttClient mqtt(net);');
+  p();
+  p('// ================== STATE ==================');
+  if (has('ultra')) p('float g_dist = 999;          // cm (999 = ไม่มี echo)');
+  if (has('temp')) p('float g_temp = NAN, g_hum = NAN;');
+  p(`String lastVal[${Math.max(T.length, 1)}];`);
+  p(`unsigned long lastPub[${Math.max(T.length, 1)}];`);
+  p();
+  p('// ================== HELPERS ==================');
+  p('void publish(const String& sub, const String& payload) {');
+  p('  String topic = SID + "/" + sub;');
+  p('  mqtt.beginMessage(topic);');
+  p('  mqtt.print(payload);');
+  p('  mqtt.endMessage();');
+  p('  Serial.print("PUB "); Serial.print(topic); Serial.print(" = "); Serial.println(payload);');
+  p('}');
+  p();
+  p('// ส่งเมื่อครบเวลา PUB_INTERVAL หรือ (onChange) เมื่อค่าเปลี่ยน');
+  p('void pubIf(int i, const char* sub, const String& v, bool onChange) {');
+  p('  if (v.length() == 0) return;');
+  p('  bool due = (lastPub[i] == 0) || (millis() - lastPub[i] >= PUB_INTERVAL);');
+  p('  if (due || (onChange && v != lastVal[i])) {');
+  p('    publish(sub, v);');
+  p('    lastVal[i] = v;');
+  p('    lastPub[i] = millis();');
+  p('  }');
+  p('}');
+  if (has('ultra')) {
+    p();
+    p('float readDistanceCM() {');
+    p('  digitalWrite(PIN_TRIG, LOW);  delayMicroseconds(2);');
+    p('  digitalWrite(PIN_TRIG, HIGH); delayMicroseconds(10);');
+    p('  digitalWrite(PIN_TRIG, LOW);');
+    p('  unsigned long us = pulseIn(PIN_ECHO, HIGH, 25000UL);   // timeout ~4 m');
+    p('  if (us == 0) return 999.0;');
+    p('  return us * 0.0343 / 2.0;');
+    p('}');
+  }
+  if (has('btn')) { p(); p('bool buttonPressed() { return digitalRead(PIN_BTN) == LOW; }'); }
+  if (has('pot')) { p(); p('int potValue() { return analogRead(PIN_POT); }   // 0..1023'); }
+  if (has('temp')) {
+    p();
+    p('void readTemp() {');
+    if (isDHT) {
+      p('  float t = dht.readTemperature();');
+      p('  float h = dht.readHumidity();');
+      p('  if (!isnan(t)) g_temp = t;');
+      p('  if (!isnan(h)) g_hum = h;');
+    } else {
+      p('  long sum = 0;');
+      p('  for (int i = 0; i < 10; i++) sum += analogRead(PIN_TEMP);');
+      p('  float v = (sum / 10.0) * 5.0 / 1023.0;');
+      if (H.temp.type === 'LM35') p('  g_temp = v * 100.0;               // LM35 10 mV/°C');
+      else if (H.temp.type === 'TMP36') p('  g_temp = (v - 0.5) * 100.0;       // TMP36');
+      else {
+        const beta = num(H.temp.beta, 3950), rNom = num(H.temp.rNom, 10000), rFix = num(H.temp.rFix, 10000);
+        p(`  // Thermistor NTC (R25 = ${rNom}, B = ${beta}), R คงที่ = ${rFix}`);
+        p(H.temp.ntcTop ? '  // ต่อแบบ: 5V -> NTC -> PIN -> R -> GND' : '  // ต่อแบบ: 5V -> R -> PIN -> NTC -> GND');
+        p('  float adc = v / 5.0 * 1023.0;');
+        p('  if (adc < 1) adc = 1;');
+        p('  if (adc > 1022) adc = 1022;');
+        p(H.temp.ntcTop ? `  float r = ${rFix.toFixed(1)} * (1023.0 - adc) / adc;   // ความต้านทาน NTC` : `  float r = ${rFix.toFixed(1)} * adc / (1023.0 - adc);   // ความต้านทาน NTC`);
+        p(`  g_temp = 1.0 / (1.0 / 298.15 + log(r / ${rNom.toFixed(1)}) / ${beta.toFixed(1)}) - 273.15;`);
+        p('  // ร้อนขึ้นแต่ค่าลด = ต่อกลับด้าน -> สลับ ntcTop / สลับสูตร r ข้างบน');
+      }
+    }
+    p('}');
+  }
+  if (has('rgb')) {
+    p();
+    p('bool rgbOn[3] = {false, false, false};');
+    p('void rgbSet(int ch, bool on) {');
+    p('  const int pins[3] = {PIN_R, PIN_G, PIN_B};');
+    p('  rgbOn[ch] = on;');
+    p('  digitalWrite(pins[ch], (on ^ RGB_COMMON_ANODE) ? HIGH : LOW);');
+    p('}');
+    p('void rgbColor(bool r, bool g, bool b) { rgbSet(0, r); rgbSet(1, g); rgbSet(2, b); }');
+  }
+  if (has('led')) { p(); p('bool ledState = false;'); p('void ledWrite(bool on) { ledState = on; digitalWrite(PIN_LED1, on ? HIGH : LOW); }'); }
+  if (has('buzzer')) {
+    p();
+    p('bool buzState = false;');
+    if (H.buzzer.passive) p('void buzzerWrite(bool on) { buzState = on; if (on) tone(PIN_BUZ, 1000); else noTone(PIN_BUZ); }   // passive buzzer');
+    else p('void buzzerWrite(bool on) { buzState = on; digitalWrite(PIN_BUZ, on ? HIGH : LOW); }   // active buzzer');
+  }
+  if (has('seg')) {
+    p();
+    p('// bit0 = a ... bit6 = g');
+    p('const byte SEG_DIGITS[10] = {0x3F, 0x06, 0x5B, 0x4F, 0x66, 0x6D, 0x7D, 0x07, 0x7F, 0x6F};');
+    p('int segValue = -1;   // -1 = ดับ');
+    p();
+    p('void segWrite(const int pins[7], byte pat) {');
+    p('  for (int i = 0; i < 7; i++) {');
+    p('    bool on = pat & (1 << i);');
+    p('    digitalWrite(pins[i], (on ^ SEG_COMMON_ANODE) ? HIGH : LOW);');
+    p('  }');
+    p('}');
+    if (!seg2) {
+      p();
+      p('void segShowNumber(int n) {   // 0..9, อื่นๆ = ดับ');
+      p('  segValue = (n >= 0 && n <= 9) ? n : -1;');
+      p('  segWrite(SEG_PINS, segValue >= 0 ? SEG_DIGITS[segValue] : 0);');
+      p('}');
+    } else if (H.seg.mode === 'mux') {
+      p();
+      p(`const bool SEG_BLANK_LEADING = ${H.seg.blank ? 'true' : 'false'};   // true: 7 แสดง " 7", false: "07"`);
+      p('void segShowNumber(int n) { segValue = (n >= 0 && n <= 99) ? n : -1; }   // 0..99');
+      p();
+      p('void digitEnable(int i, bool on) {   // CC: เปิด = LOW, CA: เปิด = HIGH');
+      p('  digitalWrite(DIG_PINS[i], (on ^ SEG_COMMON_ANODE) ? LOW : HIGH);');
+      p('}');
+      p();
+      p('// เรียกทุกรอบ loop: สลับหลักทุก 3 ms (ห้ามมี delay ยาวใน loop)');
+      p('void segRefresh() {');
+      p('  static unsigned long t = 0;');
+      p('  static int cur = 0;');
+      p('  if (micros() - t < 3000) return;');
+      p('  t = micros();');
+      p('  digitEnable(0, false);');
+      p('  digitEnable(1, false);');
+      p('  cur ^= 1;');
+      p('  byte pat = 0;');
+      p('  if (segValue >= 0) {');
+      p('    if (cur == 0) pat = (segValue < 10 && SEG_BLANK_LEADING) ? 0 : SEG_DIGITS[segValue / 10];');
+      p('    else pat = SEG_DIGITS[segValue % 10];');
+      p('  }');
+      p('  segWrite(SEG_PINS, pat);');
+      p('  digitEnable(cur, true);');
+      p('}');
+    } else {
+      p();
+      p(`const bool SEG_BLANK_LEADING = ${H.seg.blank ? 'true' : 'false'};`);
+      p('void segShowNumber(int n) {   // 0..99 (ต่อตรง 14 ขา)');
+      p('  segValue = (n >= 0 && n <= 99) ? n : -1;');
+      p('  if (segValue < 0) { segWrite(SEG_PINS, 0); segWrite(SEG2_PINS, 0); return; }');
+      p('  segWrite(SEG_PINS, (segValue < 10 && SEG_BLANK_LEADING) ? 0 : SEG_DIGITS[segValue / 10]);');
+      p('  segWrite(SEG2_PINS, SEG_DIGITS[segValue % 10]);');
+      p('}');
+    }
+  }
+  if (has('lcd')) {
+    p();
+    p('String lcdLast[2];');
+    p('void lcdPrintRow(int row, String s) {   // เขียนทั้งแถว 16 ตัว (เติมช่องว่าง)');
+    p('  if (s.length() > 16) s = s.substring(0, 16);');
+    p("  while (s.length() < 16) s += ' ';");
+    p('  if (s == lcdLast[row]) return;');
+    p('  lcdLast[row] = s;');
+    p('  lcd.setCursor(0, row);');
+    p('  lcd.print(s);');
+    p('}');
+  }
+  const kpTasks = T.map((t, i) => [t, i]).filter(([t]) => t.type === 'P_KEYPAD');
+  if (has('keypad')) {
+    p();
+    p('String keyBuf = "";');
+    p('void handleKey(char k) {');
+    p('  Serial.print("KEY "); Serial.println(k);');
+    if (!kpTasks.length) p('  // TODO: ทำอะไรกับปุ่ม k');
+    kpTasks.forEach(([t, i]) => {
+      const sub = topicSuffix(st, t);
+      p(`  // [${i + 1}] ${describeTask(st, t)}`);
+      if (t.mode === 'each') {
+        p(`  publish(${cstr(sub)}, String(k));`);
+        p(`  lastVal[${i}] = String(k);`);
+        if (t.show.startsWith('lcd')) p(`  lcdPrintRow(${t.show.slice(3)}, String("Key: ") + k);`);
+      } else {
+        p("  if (k == '#') {");
+        p(`    publish(${cstr(sub)}, keyBuf);`);
+        p(`    lastVal[${i}] = keyBuf;`);
+        if (t.show.startsWith('lcd')) p(`    lcdPrintRow(${t.show.slice(3)}, "Sent: " + keyBuf);`);
+        p('    keyBuf = "";');
+        p("  } else if (k == '*') {");
+        p('    keyBuf = "";');
+        if (t.show.startsWith('lcd')) p(`    lcdPrintRow(${t.show.slice(3)}, "");`);
+        p('  } else {');
+        p('    keyBuf += k;');
+        if (t.show.startsWith('lcd')) p(`    lcdPrintRow(${t.show.slice(3)}, "> " + keyBuf);`);
+        p('  }');
+      }
+    });
+    p('}');
+  }
+
+  // ---- sense ----
+  p();
+  p('// ================== SENSORS ==================');
+  p('void sense() {');
+  if (has('ultra')) p('  g_dist = readDistanceCM();');
+  if (has('temp')) {
+    p('  static unsigned long tTemp = 0;');
+    p(`  if (tTemp == 0 || millis() - tTemp >= ${isDHT ? 2000 : 500}) {   // ${isDHT ? 'DHT อ่านได้ทุก ~2 วิ' : 'analog'}`);
+    p('    tTemp = millis();');
+    p('    readTemp();');
+    p('  }');
+  }
+  p('}');
+
+  // ---- publishes ----
+  const SRC = {pot:'potValue()', dist:'g_dist', temp:'g_temp', hum:'g_hum'};
+  const fmt = (src, dec) => {
+    const e = SRC[src];
+    let s = dec > 0 ? `String(${e}, ${dec})` : `String((long)round(${e}))`;
+    if (src === 'pot') s = `String(${e})`;
+    if (src === 'temp' || src === 'hum') s = `isnan(${e}) ? String("") : ${s}`;
+    return s;
+  };
+  const showCode = (t, valExpr, label) => {
+    if (!t.show || t.show === 'none') return null;
+    if (t.show === 'seg') return `segShowNumber(${valExpr}.toInt());`;
+    return `lcdPrintRow(${t.show.slice(3)}, ${cstr(label + ': ')} + ${valExpr});`;
+  };
+  p();
+  p('// ================== PUBLISH ==================');
+  p('void doPublishes() {');
+  p('  String v;');
+  T.forEach((t, i) => {
+    const sub = topicSuffix(st, t);
+    if (t.type === 'P_VALUE') {
+      p(`  // [${i + 1}] ${describeTask(st, t)}`);
+      if (t.src === 'pot' && t.mapOn) p(`  v = String(map(potValue(), 0, 1023, ${parseInt(t.mapMin) || 0}, ${parseInt(t.mapMax) || 0}));`);
+      else p(`  v = ${fmt(t.src, parseInt(t.dec) || 0)};`);
+      p(`  pubIf(${i}, ${cstr(sub)}, v, false);`);
+      const s = showCode(t, 'v', sub); if (s) p('  ' + s);
+    } else if (t.type === 'P_THRESH') {
+      p(`  // [${i + 1}] ${describeTask(st, t)}`);
+      let cond = `${SRC[t.src]} ${t.op} ${num(t.thr)}`;
+      if (t.src === 'temp' || t.src === 'hum') cond = `!isnan(${SRC[t.src]}) && ${cond}`;
+      if (t.btn) cond = `(${cond}) && buttonPressed()`;
+      p(`  v = (${cond}) ? ${cstr(t.t)} : ${cstr(t.f)};`);
+      p(`  pubIf(${i}, ${cstr(sub)}, v, true);`);
+      const s = showCode(t, 'v', sub); if (s) p('  ' + s);
+    } else if (t.type === 'P_BUTTON') {
+      p(`  // [${i + 1}] ${describeTask(st, t)}`);
+      p(`  v = buttonPressed() ? ${cstr(t.p)} : ${cstr(t.r)};`);
+      p(`  pubIf(${i}, ${cstr(sub)}, v, true);`);
+      const s = showCode(t, 'v', sub); if (s) p('  ' + s);
+    }
+  });
+  p('}');
+
+  // ---- debug ----
+  const D = {SENSOR:[], PUB:[], SUB:[], OUT:[]};
+  if (has('ultra')) D.SENSOR.push(['dist=', 'g_dist', 'cm']);
+  if (has('btn')) D.SENSOR.push(['btn=', 'buttonPressed() ? "กด" : "ไม่กด"']);
+  if (has('pot')) D.SENSOR.push(['pot=', 'potValue()']);
+  if (has('temp')) { D.SENSOR.push(['temp=', 'g_temp', 'C']); if (isDHT) D.SENSOR.push(['hum=', 'g_hum', '%']); else D.SENSOR.push(['adc=', 'analogRead(PIN_TEMP)']); }
+  if (has('keypad')) D.SENSOR.push(["keyBuf='", 'keyBuf', "'"]);
+  T.forEach((t, i) => (TASK_DEF[t.type].dir === 'pub' ? D.PUB : D.SUB).push([`[${i + 1}]${topicSuffix(st, t)}=`, `lastVal[${i}]`]));
+  if (has('rgb')) D.OUT.push(['RGB=', 'rgbOn[0] ? "R" : "-"'], ['', 'rgbOn[1] ? "G" : "-"'], ['', 'rgbOn[2] ? "B" : "-"']);
+  if (has('led')) D.OUT.push(['LED=', 'ledState ? "ON" : "OFF"']);
+  if (has('buzzer')) D.OUT.push(['BUZ=', 'buzState ? "ON" : "OFF"']);
+  if (has('seg')) D.OUT.push(['7seg=', 'segValue', '']);
+  if (has('lcd')) D.OUT.push(["LCD1='", 'lcdLast[0]', "'"], ["LCD2='", 'lcdLast[1]', "'"]);
+  p();
+  p('// ================== DEBUG LOG ==================');
+  p('// พิมพ์สถานะทุกอย่างทุก DEBUG_INTERVAL ms (ปิด: DEBUG = false)');
+  p('void debugPrint() {');
+  p('  static unsigned long t = 0;');
+  p('  if (!DEBUG || millis() - t < DEBUG_INTERVAL) return;');
+  p('  t = millis();');
+  p('  Serial.print("------ DBG t="); Serial.print(millis() / 1000.0, 1); Serial.print("s  WiFi=");');
+  p('  if (WiFi.status() == WL_CONNECTED) { Serial.print("OK "); Serial.print(WiFi.RSSI()); Serial.print("dBm"); } else Serial.print("DOWN");');
+  p('  Serial.print("  MQTT="); Serial.println(mqtt.connected() ? "OK" : "DOWN");');
+  Object.keys(D).forEach(g => {
+    if (!D[g].length) return;
+    p(`  Serial.print(${cstr('  ' + g.padEnd(7))});`);
+    D[g].forEach(([l, e, suf]) => p(`  Serial.print(${cstr((l ? ' ' : '') + l)}); Serial.print(${e});${suf ? ` Serial.print(${cstr(suf)});` : ''}`));
+    p('  Serial.println();');
+  });
+  p('}');
+  p();
+  p('void printBanner() {');
+  p('  Serial.println();');
+  p('  Serial.println("===== Phycom exam sketch =====");');
+  p('  Serial.print("SID = "); Serial.print(SID); Serial.print("   broker = "); Serial.print(broker); Serial.print(":"); Serial.println(port);');
+  T.forEach((t, i) => p(`  Serial.println(${cstr(`[${i + 1}] ` + describeTask(st, t))});`));
+  wiringLines.forEach(w => p(`  Serial.println(${cstr('WIRE ' + w)});`));
+  p('  Serial.println("==============================");');
+  p('}');
+
+  // ---- subscribe ----
+  const subs = T.map((t, i) => [t, i]).filter(([t]) => TASK_DEF[t.type].dir === 'sub');
+  p();
+  p('// ================== SUBSCRIBE ==================');
+  p('void onMqttMessage(int messageSize) {');
+  p('  String topic = mqtt.messageTopic();');
+  p('  String msg = "";');
+  p('  while (mqtt.available()) msg += (char)mqtt.read();');
+  p('  msg.trim();');
+  p('  Serial.print("SUB "); Serial.print(topic); Serial.print(" = "); Serial.println(msg);');
+  subs.forEach(([t, i]) => {
+    const sub = topicSuffix(st, t);
+    p();
+    p(`  // [${i + 1}] ${describeTask(st, t)}`);
+    p(`  if (topic == SID + ${cstr('/' + sub)}) {`);
+    p(`    lastVal[${i}] = msg;`);
+    if (t.type === 'S_RGB') {
+      p('    int v = (int)round(msg.toFloat());');
+      const rs = parseRanges(t.ranges).ranges;
+      rs.forEach((r, k) => p(`    ${k ? 'else if' : 'if'} (${r.expr}) rgbColor(${r.color.join(', ')});   // ${COLOR_NAME(r.color)}`));
+      p(`    ${rs.length ? 'else ' : ''}rgbColor(0, 0, 0);   // นอกช่วง = ดับ`);
+    } else if (t.type === 'S_SEG') {
+      p('    if (msg.length() > 0 && isDigit(msg.charAt(0))) segShowNumber(msg.toInt());');
+      p('    else segShowNumber(-1);');
+    } else if (t.type === 'S_LCD') {
+      p(`    lcdPrintRow(${+t.row || 0}, ${t.prefix ? cstr(t.prefix) + ' + msg' : 'msg'});`);
+    } else if (t.type === 'S_ONOFF') {
+      p(`    if (msg.equalsIgnoreCase(${cstr(t.on)})) ${outCode(t.target, 'true')}`);
+      p(`    else if (msg.equalsIgnoreCase(${cstr(t.off)})) ${outCode(t.target, 'false')}`);
+    } else if (t.type === 'S_THRESH') {
+      p('    float v = msg.toFloat();');
+      p(`    ${outCode(t.target, `v ${t.op} ${num(t.thr)}`)}`);
+    } else if (t.type === 'S_PWM') {
+      const mx = parseInt(t.max) || 255;
+      p(`    int v = constrain(msg.toInt(), 0, ${mx});`);
+      p(`    int duty = map(v, 0, ${mx}, 0, 255);`);
+      if (t.target === 'led') p('    analogWrite(PIN_LED1, duty);');
+      else { const pin = {rgbR:'PIN_R', rgbG:'PIN_G', rgbB:'PIN_B'}[t.target]; p(`    analogWrite(${pin}, RGB_COMMON_ANODE ? 255 - duty : duty);`); }
+    }
+    p('  }');
+  });
+  if (!subs.length) p('  // (ยังไม่มีข้อ subscribe)');
+  p('}');
+
+  // ---- connect ----
+  p();
+  p('// ================== CONNECTION ==================');
+  p('void connectWiFi() {');
+  p('  if (WiFi.status() == WL_CONNECTED) return;');
+  p('  Serial.print("WiFi: connecting to "); Serial.println(ssid);');
+  if (has('lcd')) p('  lcdPrintRow(0, "WiFi...");');
+  p('  while (WiFi.begin(ssid, pass) != WL_CONNECTED) {');
+  p('    Serial.print(".");');
+  p('    delay(2000);');
+  p('  }');
+  p('  while (WiFi.localIP() == IPAddress(0, 0, 0, 0)) delay(200);');
+  p('  Serial.print("\\nWiFi OK, IP = "); Serial.println(WiFi.localIP());');
+  p('}');
+  p();
+  p('void connectMQTT() {');
+  if (has('lcd')) p('  lcdPrintRow(0, "MQTT...");');
+  p('  mqtt.setId("R4_" + SID + "_" + String(micros() & 0xFFFF, HEX));');
+  if (c.user) p('  mqtt.setUsernamePassword(mqttUser, mqttPass);');
+  p('  while (!mqtt.connect(broker, port)) {');
+  p('    Serial.print("MQTT failed, error = "); Serial.println(mqtt.connectError());');
+  p('    delay(2000);');
+  p('    connectWiFi();');
+  p('  }');
+  p('  Serial.println("MQTT connected");');
+  p('  mqtt.onMessage(onMqttMessage);');
+  subs.forEach(([t]) => p(`  mqtt.subscribe(SID + ${cstr('/' + topicSuffix(st, t))});`));
+  if (has('lcd')) p('  lcdPrintRow(0, "Ready"); lcdPrintRow(1, "");');
+  p('}');
+
+  // ---- setup ----
+  p();
+  p('// ================== SETUP / LOOP ==================');
+  p('void setup() {');
+  p('  Serial.begin(115200);');
+  p('  delay(1000);');
+  if (has('rgb')) { p('  pinMode(PIN_R, OUTPUT); pinMode(PIN_G, OUTPUT); pinMode(PIN_B, OUTPUT);'); p('  rgbColor(0, 0, 0);'); }
+  if (has('led')) p('  pinMode(PIN_LED1, OUTPUT);');
+  if (has('buzzer')) p('  pinMode(PIN_BUZ, OUTPUT);');
+  if (has('btn')) p('  pinMode(PIN_BTN, INPUT_PULLUP);');
+  if (has('ultra')) { p('  pinMode(PIN_TRIG, OUTPUT);'); p('  pinMode(PIN_ECHO, INPUT);'); }
+  if (has('temp') && isDHT) p('  dht.begin();');
+  if (has('seg')) {
+    p('  for (int i = 0; i < 7; i++) pinMode(SEG_PINS[i], OUTPUT);');
+    if (seg2 && H.seg.mode === 'mux') p('  for (int i = 0; i < 2; i++) pinMode(DIG_PINS[i], OUTPUT);');
+    if (seg2 && H.seg.mode !== 'mux') p('  for (int i = 0; i < 7; i++) pinMode(SEG2_PINS[i], OUTPUT);');
+    p('  segShowNumber(-1);');
+  }
+  if (has('lcd')) { if (H.lcd.type === 'i2c') { p('  lcd.init();'); p('  lcd.backlight();'); } else p('  lcd.begin(16, 2);'); }
+  p('  printBanner();');
+  p('  connectWiFi();');
+  p('  connectMQTT();');
+  p('}');
+  p();
+  p('void loop() {');
+  p('  if (WiFi.status() != WL_CONNECTED) connectWiFi();');
+  p('  if (!mqtt.connected()) connectMQTT();');
+  p('  mqtt.poll();                       // ต้องเรียกบ่อยๆ ถึงจะรับ subscribe ได้');
+  if (has('seg') && seg2 && H.seg.mode === 'mux') p('  segRefresh();');
+  if (has('keypad')) { p('  char k = keypad.getKey();'); p('  if (k) handleKey(k);'); }
+  p();
+  p('  static unsigned long tSense = 0;');
+  p('  if (millis() - tSense >= SENSE_INTERVAL) {');
+  p('    tSense = millis();');
+  p('    sense();');
+  p('    doPublishes();');
+  p('  }');
+  p('  debugPrint();');
+  p('}');
+  return L.join('\n') + '\n';
+}
+
+function autoAssign(st){
+  const used = usedHW(st);
+  const H = st.hw;
+  const taken = new Set();
+  const take = (pool) => { for (const x of pool) if (!taken.has(x)) { taken.add(x); return x; } return '?'; };
+  const DIG = ['2','3','4','5','6','7','8','9','10','11','12','13','A1','A2','A3','A0','A4','A5','0','1'];
+  const ANA = ['A0','A1','A2','A3','A4','A5'];
+  if (used.has('lcd') && H.lcd.type === 'i2c') { taken.add('A4'); taken.add('A5'); }
+  if (used.has('pot')) H.pot.POT = take(ANA);
+  if (used.has('temp')) H.temp.TEMP = /^DHT/.test(H.temp.type) ? take(['A1','A2','A3','A0','A4','A5'].concat(DIG)) : take(ANA);
+  if (used.has('seg')) {
+    SEG_KEYS.forEach(k => H.seg[k] = take(DIG));
+    if (+H.seg.digits === 2) {
+      if (H.seg.mode === 'mux') { H.seg.DIG1 = take(DIG); H.seg.DIG2 = take(DIG); }
+      else SEG_KEYS.forEach(k => H.seg[k + '2'] = take(DIG));
+    }
+  }
+  if (used.has('keypad')) KP_KEYS.forEach(k => H.keypad[k] = take(DIG));
+  if (used.has('lcd') && H.lcd.type !== 'i2c') ['RS','E','D4','D5','D6','D7'].forEach(k => H.lcd[k] = take(DIG));
+  if (used.has('rgb')) { const PW = ['9','10','11','3','5','6']; const pwmNeeded = st.tasks.some(t => t.type === 'S_PWM' && String(t.target).startsWith('rgb'));
+    ['R','G','B'].forEach(k => H.rgb[k] = take(pwmNeeded ? PW.concat(DIG) : DIG)); }
+  if (used.has('led')) { const pwm = st.tasks.some(t => t.type === 'S_PWM' && t.target === 'led'); H.led.LED = take(pwm ? PWM_PINS : DIG); }
+  if (used.has('ultra')) { H.ultra.TRIG = take(DIG); H.ultra.ECHO = take(DIG); }
+  if (used.has('btn')) H.btn.BTN = take(DIG);
+  if (used.has('buzzer')) H.buzzer.BUZ = take(DIG);
+  return st;
+}
+if (typeof module !== 'undefined') module.exports = {generate, PRESETS, checkState, autoAssign, mkTask, defaultHW, defaultCfg, usedHW};
+/*GEN-END*/
+</script>
+
+<script>
+(function(){
+  const $ = s => document.querySelector(s);
+  const el = (tag, attrs, ...kids) => {
+    const e = document.createElement(tag);
+    for (const k in (attrs || {})) {
+      if (k === 'class') e.className = attrs[k];
+      else if (k.startsWith('on')) e.addEventListener(k.slice(2), attrs[k]);
+      else if (k === 'checked' || k === 'value') e[k] = attrs[k];
+      else e.setAttribute(k, attrs[k]);
+    }
+    kids.flat().forEach(c => { if (c != null) e.append(c.nodeType ? c : document.createTextNode(c)); });
+    return e;
+  };
+  const toast = m => { const t = $('#toast'); t.textContent = m; t.classList.add('on'); clearTimeout(toast.h); toast.h = setTimeout(() => t.classList.remove('on'), 1400); };
+  const copy = txt => {
+    const done = () => toast('คัดลอกแล้ว');
+    if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(txt).then(done, () => fallback());
+    else fallback();
+    function fallback(){ const ta = el('textarea', {style:'position:fixed;opacity:0'}); ta.value = txt; document.body.append(ta); ta.select(); try { document.execCommand('copy'); done(); } catch (e) { toast('คัดลอกไม่ได้ — เลือกข้อความเอง'); } ta.remove(); }
+  };
+  const download = (name, txt) => { const a = el('a', {href:URL.createObjectURL(new Blob([txt], {type:'text/plain'})), download:name}); document.body.append(a); a.click(); a.remove(); };
+
+  // ---------- theme ----------
+  const root = document.documentElement;
+  try { const th = localStorage.getItem('phycom-theme'); if (th) root.dataset.theme = th; } catch (e) {}
+  $('#themeBtn').onclick = () => {
+    const dark = root.dataset.theme ? root.dataset.theme === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches;
+    root.dataset.theme = dark ? 'light' : 'dark';
+    try { localStorage.setItem('phycom-theme', root.dataset.theme); } catch (e) {}
+  };
+
+  // ---------- tabs ----------
+  const showTab = name => {
+    document.querySelectorAll('#nav button').forEach(b => b.classList.toggle('on', b.dataset.tab === name));
+    document.querySelectorAll('.tab').forEach(s => s.classList.toggle('on', s.id === 'tab-' + name));
+    try { localStorage.setItem('phycom-tab', name); } catch (e) {}
+  };
+  document.querySelectorAll('#nav button').forEach(b => b.onclick = () => showTab(b.dataset.tab));
+  try { const t = localStorage.getItem('phycom-tab'); if (t && $('#tab-' + t)) showTab(t); } catch (e) {}
+  if (location.hash && $('#tab-' + location.hash.slice(1))) showTab(location.hash.slice(1));
+
+  // ---------- generator state ----------
+  let st;
+  try { st = JSON.parse(localStorage.getItem('phycom-state2') || 'null'); } catch (e) {}
+  if (!st || !st.cfg || !st.hw || !st.tasks) st = PRESETS.mock.make();
+  // merge new default fields
+  const dh = defaultHW(); for (const k in dh) st.hw[k] = Object.assign(dh[k], st.hw[k] || {});
+  st.cfg = Object.assign(defaultCfg(), st.cfg);
+
+  const save = () => { try { localStorage.setItem('phycom-state2', JSON.stringify(st)); } catch (e) {} };
+
+  function loadPreset(key){ st = PRESETS[key].make(); renderAll(); showTab('gen'); toast('โหลด ' + PRESETS[key].label); }
+  const pre = $('#presets');
+  Object.keys(PRESETS).forEach(k => pre.append(el('button', {class:'btn' + (k === 'mock' ? ' pri' : ''), onclick:() => loadPreset(k)}, PRESETS[k].label)));
+  document.querySelectorAll('[data-preset]').forEach(b => b.onclick = () => loadPreset(b.dataset.preset));
+
+  // config
+  const CFG_FIELDS = [['sid','รหัสนักศึกษา (SID)'],['ssid','WiFi SSID'],['pass','WiFi Password'],['broker','Broker'],['port','Port'],['pubMs','ส่งซ้ำทุก (ms)'],['user','MQTT user (ถ้ามี)'],['mpass','MQTT pass (ถ้ามี)']];
+  function renderCfg(){
+    const box = $('#cfg'); box.innerHTML = '';
+    CFG_FIELDS.forEach(([k, lab]) => box.append(el('label', {class:'f'}, lab, el('input', {value:st.cfg[k] == null ? '' : st.cfg[k], oninput:e => { st.cfg[k] = e.target.value; if (k === 'sid') renderTasks(); update(); }}))));
+  }
+
+  // tasks
+  const addSel = $('#addType');
+  Object.keys(TASK_DEF).forEach(k => addSel.append(el('option', {value:k}, TASK_DEF[k].label)));
+  $('#addBtn').onclick = () => { st.tasks.push(mkTask(addSel.value)); renderTasks(); renderHW(); update(); };
+
+  function field(t, f){
+    const [key, kind, lab, opts] = f;
+    const set = v => { t[key] = v; if (key === 'src' || key === 'mapOn' || key === 'target') renderTasks(); renderHW(); update(); };
+    if (kind === 'select') {
+      const s = el('select', {onchange:e => set(e.target.value)}, opts.map(([v, l]) => el('option', {value:v}, l)));
+      s.value = t[key];
+      return el('label', {class:'f'}, lab, s);
+    }
+    if (kind === 'check') return el('label', {class:'f'}, lab, el('input', {type:'checkbox', checked:!!t[key], onchange:e => set(e.target.checked)}));
+    if (kind === 'textarea') return el('label', {class:'f', style:'grid-column:1/-1'}, lab, el('textarea', {class:'mono', rows:4, value:t[key], oninput:e => { t[key] = e.target.value; update(); }}));
+    return el('label', {class:'f'}, lab, el('input', {type:kind === 'number' ? 'number' : 'text', value:t[key], oninput:e => { t[key] = e.target.value; update(); }}));
+  }
+  function renderTasks(){
+    const box = $('#tasks'); box.innerHTML = '';
+    if (!st.tasks.length) box.append(el('p', {class:'muted small'}, 'ยังไม่มีข้อ — เลือกประเภทแล้วกด “+ เพิ่มข้อ” หรือโหลด preset'));
+    st.tasks.forEach((t, i) => {
+      const d = TASK_DEF[t.type];
+      const topicIn = el('input', {value:t.topic, placeholder:'topic', oninput:e => { t.topic = e.target.value; update(); }});
+      const move = dir => { const j = i + dir; if (j < 0 || j >= st.tasks.length) return; [st.tasks[i], st.tasks[j]] = [st.tasks[j], st.tasks[i]]; renderTasks(); update(); };
+      box.append(el('div', {class:'task'},
+        el('div', {class:'head'},
+          el('b', null, (i + 1) + '.'),
+          el('span', {class:'pill ' + d.dir}, d.dir.toUpperCase()),
+          (() => { const s = el('select', {style:'flex:1;min-width:160px', onchange:e => { st.tasks[i] = mkTask(e.target.value, {topic:t.topic}); renderTasks(); renderHW(); update(); }},
+              Object.keys(TASK_DEF).map(k => el('option', {value:k}, TASK_DEF[k].label))); s.value = t.type; return s; })(),
+              el('button', {class:'btn sm', title:'ขึ้น', onclick:() => move(-1)}, '↑'),
+          el('button', {class:'btn sm', title:'ลง', onclick:() => move(1)}, '↓'),
+          el('button', {class:'btn sm danger', onclick:() => { st.tasks.splice(i, 1); renderTasks(); renderHW(); update(); }}, 'ลบ')),
+        el('div', {class:'row', style:'margin-bottom:8px'}, el('div', {class:'topic'}, el('span', {class:'mono'}, (st.cfg.sid || '') + '/'), topicIn)),
+        el('div', {class:'cols'}, d.fields.filter(f => {
+          const k = f[0];
+          if ((k === 'mapOn' || k === 'mapMin' || k === 'mapMax') && t.src !== 'pot') return false;
+          if ((k === 'mapMin' || k === 'mapMax') && !t.mapOn) return false;
+          if (k === 'dec' && t.src === 'pot') return false;
+          return true;
+        }).map(f => field(t, f))),
+        el('div', {class:'msg info small preview', 'data-i':i, style:'margin:8px 0 0'}, '')
+      ));
+    });
+  }
+
+  // hardware
+  function renderHW(){
+    const box = $('#hw'); box.innerHTML = '';
+    const used = new Set(); st.tasks.forEach(t => { /* computed via usedHW */ });
+    const u = usedHW(st);
+    Object.keys(HW_DEF).forEach(name => {
+      const h = st.hw[name];
+      const auto = st.tasks.some(t => taskNeeds(t).has(name));
+      const isUsed = u.has(name);
+      const pins = el('div', {class:'pins'}, hwPinList(name, h).map(([k, v, ed]) =>
+        el('label', null, k, el('input', {class:'mono', value:v, disabled:!ed, oninput:e => { h[k] = e.target.value; update(); }}))));
+      const opts = el('div', {class:'opts'});
+      const chk = (k, lab) => opts.append(el('label', null, el('input', {type:'checkbox', checked:!!h[k], onchange:e => { h[k] = e.target.checked; update(); }}), ' ' + lab));
+      const sel = (k, lab, list, rerender) => { const s = el('select', {onchange:e => { h[k] = e.target.value; if (rerender) renderHW(); update(); }}, list.map(([v, l]) => el('option', {value:v}, l))); s.value = String(h[k]); opts.append(el('label', null, lab + ' ', s)); };
+      if (name === 'rgb') chk('anode', 'common anode (LOW = ติด)');
+      if (name === 'buzzer') chk('passive', 'passive (ใช้ tone)');
+      if (name === 'temp') {
+        sel('type', 'ชนิด', [['NTC','Thermistor NTC'],['DHT11','DHT11'],['DHT22','DHT22'],['LM35','LM35'],['TMP36','TMP36']], true);
+        if (h.type === 'NTC') {
+          chk('ntcTop', 'NTC อยู่ฝั่ง 5V (R ลง GND)');
+          [['beta','β'],['rNom','R25 NTC'],['rFix','R คงที่']].forEach(([k, lab]) => opts.append(el('label', null, lab + ' ', el('input', {type:'number', style:'width:80px', value:h[k], oninput:e => { h[k] = e.target.value; update(); }}))));
+        }
+      }
+      if (name === 'seg') { sel('digits', 'หลัก', [['1','1 หลัก'],['2','2 หลัก']], true); if (+h.digits === 2) { sel('mode', 'วิธี', [['mux','multiplex (9 ขา)'],['direct','ต่อตรง (14 ขา)']], true); chk('blank', 'ไม่แสดง 0 นำหน้า'); } chk('anode', 'common anode'); }
+      if (name === 'lcd') { sel('type', 'ชนิด', [['parallel','Parallel 16 ขา'],['i2c','I2C (A4/A5)']], true); if (h.type === 'i2c') opts.append(el('label', null, 'addr ', el('input', {class:'mono', style:'width:70px', value:h.addr, oninput:e => { h.addr = e.target.value; update(); }}))); }
+      box.append(el('div', {class:'hw' + (isUsed ? ' used' : ' off')},
+        el('div', {class:'t'},
+          el('label', null, el('input', {type:'checkbox', checked:isUsed, disabled:auto, onchange:e => { h.on = e.target.checked; renderHW(); update(); }}), ' ' + HW_DEF[name].label),
+          auto ? el('span', {class:'small muted'}, '(ใช้โดยข้อสอบ)') : null),
+        pins, opts.childNodes.length ? opts : null));
+    });
+  }
+  $('#autoPins').onclick = () => { autoAssign(st); renderHW(); update(); toast('จัดขาใหม่แล้ว'); };
+
+  // ---------- diagrams ----------
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'})[c]);
+  const WC = {v5:'#e03131', gnd:'#5c6670', sig:['#f08c00','#1c7ed6','#2f9e44','#ae3ec9','#0c8599','#d6336c','#e8590c','#5c940d']};
+  const LEG = '#bfa76a';
+  const W = (pts, c, w) => `<polyline points="${pts.map(p => p.join(',')).join(' ')}" fill="none" stroke="${c}" stroke-width="${w || 3}" stroke-linecap="round" stroke-linejoin="round"/>`;
+  const TAG = (x, y, txt, c, minW) => { const w = Math.max(minW || 36, String(txt).length * 7.4 + 16); return `<rect x="${x - w / 2}" y="${y - 11}" width="${w}" height="22" rx="11" fill="${c}"/><text x="${x}" y="${y + 4}" text-anchor="middle" class="tg">${esc(txt)}</text>`; };
+  const TX = (x, y, txt, cls, anchor) => `<text x="${x}" y="${y}" text-anchor="${anchor || 'middle'}" class="${cls || ''}">${esc(txt)}</text>`;
+  const B10K = ['#8b5a2b', '#222', '#f08c00'], B220 = ['#e03131', '#e03131', '#8b5a2b'];
+  const RES = (x, y, horiz, bands) => {
+    const b = bands || B10K;
+    if (horiz) return `<rect x="${x - 18}" y="${y - 7}" width="36" height="14" rx="6" fill="#e9d8a6"/>` + b.map((c, i) => `<rect x="${x - 11 + i * 7}" y="${y - 7}" width="4" height="14" fill="${c}"/>`).join('') + `<rect x="${x + 11}" y="${y - 7}" width="3" height="14" fill="#c9a227"/>`;
+    return `<rect x="${x - 7}" y="${y - 18}" width="14" height="36" rx="6" fill="#e9d8a6"/>` + b.map((c, i) => `<rect x="${x - 7}" y="${y - 11 + i * 7}" width="14" height="4" fill="${c}"/>`).join('') + `<rect x="${x - 7}" y="${y + 11}" width="14" height="3" fill="#c9a227"/>`;
+  };
+  const SVG = (w, h, body) => `<svg class="dia" viewBox="0 0 ${w} ${h}" style="max-width:${w}px">${body}</svg>`;
+  const PL = p => pinLabel(p);
+
+  function diaBoard(){
+    const u = usedHW(st), own = {};
+    const SHORT = (name, k) => ({rgb:'RGB ' + k, led:'LED', buzzer:'Buzzer', btn:'ปุ่ม', pot:'Pot ขากลาง', ultra:'Ultra ' + (k === 'TRIG' ? 'Trig' : 'Echo'),
+      temp:st.hw.temp.type === 'NTC' ? 'NTC จุดชน' : 'Temp', seg:'7seg ' + k, lcd:'LCD ' + k, keypad:'Key ' + k})[name];
+    u.forEach(name => hwPinList(name, st.hw[name]).forEach(([k, v]) => { const n = normPin(v); if (n != null) (own[n] = own[n] || []).push(SHORT(name, k)); }));
+    const TOP = ['SCL','SDA','AREF','GND','13','12','11','10','9','8',null,'7','6','5','4','3','2','1','0'];
+    const BOT = ['NC','IOREF','RESET','3.3V','5V','GND','GND','VIN',null,'A0','A1','A2','A3','A4','A5'];
+    let s = `<rect x="40" y="80" width="640" height="170" rx="14" fill="#0b7285"/>`;
+    s += `<rect x="20" y="100" width="64" height="46" rx="4" fill="#adb5bd"/><text x="52" y="128" text-anchor="middle" class="tg">USB-C</text>`;
+    s += `<rect x="20" y="186" width="54" height="44" rx="4" fill="#343a40"/>`;
+    s += `<text x="165" y="168" text-anchor="middle" class="tg" style="font-size:17px">UNO R4 WiFi</text>`;
+    s += `<text x="165" y="186" text-anchor="middle" class="tg" style="font-size:10px;opacity:.8">มองด้านบน · USB อยู่ซ้าย</text>`;
+    const anyUsed = u.size > 0;
+    const pin = (name, x, y, top) => {
+      if (!name) return '';
+      const n = normPin(name);
+      const pw = name === '5V' || name === 'GND';
+      const who = n != null ? own[n] : null;
+      const fill = who ? (who.length > 1 ? '#fa5252' : '#ffd43b') : (pw && anyUsed ? (name === '5V' ? WC.v5 : '#ced4da') : '#212529');
+      let r = `<rect x="${x - 8}" y="${y - 8}" width="16" height="16" rx="2" fill="${fill}" stroke="#000" stroke-opacity=".4"/>`;
+      const lab = /^\d+$/.test(name) ? 'D' + name : name;
+      r += top ? `<text x="${x + 4}" y="${y + 14}" transform="rotate(90 ${x + 4} ${y + 14})" class="tg" style="font-size:10px">${lab}</text>`
+               : `<text x="${x + 4}" y="${y - 14}" transform="rotate(-90 ${x + 4} ${y - 14})" class="tg" style="font-size:10px">${lab}</text>`;
+      let desc = who ? who.join(' / ') : (pw && anyUsed ? (name === '5V' ? '5V = ไฟ +' : 'GND = ไฟ −') : '');
+      if (desc) r += top ? `<text x="${x + 4}" y="${y - 16}" transform="rotate(-90 ${x + 4} ${y - 16})" class="${who ? 'dl' : 'mut'}">${esc(desc)}</text>`
+                         : `<text x="${x + 4}" y="${y + 16}" transform="rotate(90 ${x + 4} ${y + 16})" class="${who ? 'dl' : 'mut'}">${esc(desc)}</text>`;
+      return r;
+    };
+    let x = 230;
+    TOP.forEach(n => { if (n === null) { x += 14; return; } s += pin(n, x, 92, true); x += 24; });
+    x = 290;
+    BOT.forEach(n => { if (n === null) { x += 14; return; } s += pin(n, x, 238, false); x += 24; });
+    const sec = (x, y, t) => `<text x="${x}" y="${y}" text-anchor="middle" class="tg" style="font-size:10px;opacity:.85">${t}</text>`;
+    s += sec(470, 160, 'DIGITAL (PWM ~ = D3, D5, D6, D9, D10, D11)');
+    s += sec(386, 180, 'POWER') + sec(568, 180, 'ANALOG IN');
+    return SVG(720, 350, s);
+  }
+
+  function diaPot(){
+    const p = st.hw.pot.POT, c = WC.sig[0];
+    let s = `<rect x="70" y="100" width="140" height="36" rx="6" fill="#adb5bd"/><circle cx="140" cy="70" r="46" fill="#495057"/><circle cx="140" cy="70" r="20" fill="#dee2e6"/><rect x="137" y="52" width="6" height="18" rx="2" fill="#495057"/>`;
+    [90, 140, 190].forEach(x => s += `<rect x="${x - 3}" y="136" width="6" height="26" fill="${LEG}"/>`);
+    s += W([[90,162],[90,202]], WC.v5) + W([[140,162],[140,202]], c) + W([[190,162],[190,202]], WC.gnd);
+    s += TAG(90, 212, '5V', WC.v5) + TAG(140, 212, PL(p), c) + TAG(190, 212, 'GND', WC.gnd);
+    s += TX(90, 245, 'ขาซ้าย', 'mut') + TX(140, 245, 'ขากลาง', 'mut') + TX(190, 245, 'ขาขวา', 'mut');
+    return SVG(280, 255, s);
+  }
+
+  function diaNTC(){
+    const h = st.hw.temp, p = h.TEMP, c = WC.sig[1];
+    const top = h.type === 'NTC' && h.ntcTop;
+    const res = x => RES(x, 70, true) + TX(x, 42, 'R 10kΩ', 'b') + TX(x, 56, 'น้ำตาล-ดำ-ส้ม', 'mut');
+    const ntc = x => W([[x - 30, 70],[x + 30, 70]], LEG, 2) + `<circle cx="${x}" cy="70" r="13" fill="#212529" stroke="#adb5bd" stroke-width="2"/><text x="${x}" y="74" text-anchor="middle" class="tg" style="font-size:9px">103</text>` + TX(x, 42, 'NTC', 'b') + TX(x, 56, 'เม็ดดำ (103)', 'mut');
+    let s = TAG(36, 70, '5V', WC.v5) + W([[58,70],[112,70]], WC.v5);
+    s += top ? ntc(150) : res(150);
+    s += W([[180,70],[250,70]], c) + `<circle cx="215" cy="70" r="6" fill="${c}"/>`;
+    s += top ? res(280) : ntc(280);
+    s += W([[310,70],[352,70]], WC.gnd) + TAG(380, 70, 'GND', WC.gnd);
+    s += W([[215,70],[215,140]], c) + TAG(215, 152, PL(p), c);
+    s += TX(232, 108, 'จุดชน → สายไปบอร์ด', 'mut', 'start');
+    return SVG(420, 180, s);
+  }
+
+  function diaRGB(){
+    const h = st.hw.rgb;
+    const ch = [['R', h.R, '#f03e3e'], ['COM', null, null], ['G', h.G, '#2f9e44'], ['B', h.B, '#1c7ed6']];
+    let s = `<path d="M125 120 L125 62 A55 55 0 0 1 235 62 L235 120 Z" fill="#dee2e6" stroke="#adb5bd"/><rect x="117" y="118" width="126" height="10" rx="3" fill="#ced4da"/>`;
+    s += `<circle cx="160" cy="80" r="7" fill="#f03e3e" opacity=".7"/><circle cx="180" cy="66" r="7" fill="#2f9e44" opacity=".7"/><circle cx="200" cy="80" r="7" fill="#1c7ed6" opacity=".7"/>`;
+    const legX = [140, 166, 194, 220], outX = [60, 140, 220, 300];
+    ch.forEach(([n, pin, col], i) => {
+      const len = n === 'COM' ? 175 : 158;
+      s += `<rect x="${legX[i] - 2}" y="128" width="4" height="${len - 128}" fill="${LEG}"/>`;
+      const c = n === 'COM' ? (h.anode ? WC.v5 : WC.gnd) : col;
+      s += W([[legX[i], len], [legX[i], 185], [outX[i], 200], [outX[i], 262]], c);
+      if (n !== 'COM') s += RES(outX[i], 228, false, B220);
+      s += TAG(outX[i], 272, n === 'COM' ? (h.anode ? '5V' : 'GND') : PL(pin), c);
+      s += TX(outX[i], 300, n === 'COM' ? 'COM (ขายาวสุด)' : n + ' + R220', 'mut');
+    });
+    return SVG(360, 312, s);
+  }
+
+  function diaButton(){
+    const p = st.hw.btn.BTN, c = WC.sig[3];
+    let s = `<rect x="95" y="60" width="90" height="50" rx="8" fill="#343a40"/><rect x="115" y="30" width="50" height="30" rx="6" fill="#868e96"/>`;
+    s += W([[115,110],[115,150]], LEG, 4) + W([[165,110],[165,150]], LEG, 4);
+    s += W([[115,150],[115,165],[70,180],[70,200]], c) + TAG(70, 212, PL(p), c);
+    s += W([[165,150],[165,165],[210,180],[210,200]], WC.gnd) + TAG(210, 212, 'GND', WC.gnd);
+    s += TX(70, 242, 'ขาไหนก็ได้', 'mut') + TX(210, 242, 'อีกขา', 'mut');
+    return SVG(280, 252, s);
+  }
+
+  function diaUltra(){
+    const h = st.hw.ultra;
+    let s = `<rect x="60" y="20" width="240" height="115" rx="8" fill="#1864ab"/>`;
+    [120, 240].forEach((x, i) => s += `<circle cx="${x}" cy="72" r="38" fill="#dee2e6"/><circle cx="${x}" cy="72" r="24" fill="#868e96"/><text x="${x}" y="77" text-anchor="middle" class="tg">${i ? 'R' : 'T'}</text>`);
+    s += `<text x="180" y="40" text-anchor="middle" class="tg" style="font-size:11px">HC-SR04</text>`;
+    const pins = [['VCC', '5V', WC.v5], ['Trig', PL(h.TRIG), WC.sig[0]], ['Echo', PL(h.ECHO), WC.sig[1]], ['GND', 'GND', WC.gnd]];
+    const outX = [70, 140, 220, 290];
+    pins.forEach(([n, d, c], i) => {
+      const px = 156 + i * 16;
+      s += `<rect x="${px - 2}" y="135" width="4" height="22" fill="${LEG}"/>`;
+      s += W([[px, 157], [px, 168], [outX[i], 188], [outX[i], 205]], c) + TAG(outX[i], 215, d, c) + TX(outX[i], 245, n, 'mut');
+    });
+    return SVG(360, 255, s);
+  }
+
+  function diaLED(){
+    const p = st.hw.led.LED, c = WC.sig[4];
+    let s = `<path d="M95 110 L95 60 A35 35 0 0 1 165 60 L165 110 Z" fill="#ffc9c9" stroke="#fa5252"/><rect x="88" y="108" width="84" height="8" rx="3" fill="#ffa8a8"/>`;
+    s += `<rect x="113" y="116" width="4" height="74" fill="${LEG}"/><rect x="143" y="116" width="4" height="58" fill="${LEG}"/>`;
+    s += W([[115,190],[115,198],[70,210],[70,252]], c) + RES(70, 228, false, B220) + TAG(70, 262, PL(p), c);
+    s += W([[145,174],[145,198],[190,210],[190,252]], WC.gnd) + TAG(190, 262, 'GND', WC.gnd);
+    s += TX(70, 292, '+ ขายาว + R220', 'mut') + TX(190, 292, '− ขาสั้น (ฝั่งแบน)', 'mut');
+    return SVG(260, 302, s);
+  }
+
+  function diaBuzzer(){
+    const p = st.hw.buzzer.BUZ, c = WC.sig[5];
+    let s = `<circle cx="130" cy="70" r="52" fill="#212529"/><circle cx="130" cy="70" r="7" fill="#495057"/><text x="104" y="45" class="tg" style="font-size:18px">+</text>`;
+    s += `<rect x="113" y="122" width="4" height="34" fill="${LEG}"/><rect x="143" y="122" width="4" height="26" fill="${LEG}"/>`;
+    s += W([[115,156],[115,166],[70,180],[70,198]], c) + TAG(70, 208, PL(p), c);
+    s += W([[145,148],[145,166],[190,180],[190,198]], WC.gnd) + TAG(190, 208, 'GND', WC.gnd);
+    s += TX(70, 238, '+ (ขายาว)', 'mut') + TX(190, 238, '−', 'mut');
+    return SVG(260, 248, s);
+  }
+
+  function diaSeg(){
+    const h = st.hw.seg, two = +h.digits === 2;
+    const com = two ? (h.mode === 'mux' ? 'DIG' : (h.anode ? '5V' : 'GND')) : (h.anode ? '5V' : 'GND');
+    const comC = com === '5V' ? WC.v5 : (com === 'GND' ? WC.gnd : WC.sig[3]);
+    let s = `<rect x="150" y="70" width="120" height="160" rx="6" fill="#212529"/>`;
+    const sg = '#ff6b6b';
+    s += `<g fill="${sg}"><rect x="182" y="88" width="50" height="9" rx="4"/><rect x="232" y="96" width="9" height="50" rx="4"/><rect x="232" y="156" width="9" height="50" rx="4"/><rect x="182" y="205" width="50" height="9" rx="4"/><rect x="173" y="156" width="9" height="50" rx="4"/><rect x="173" y="96" width="9" height="50" rx="4"/><rect x="182" y="146" width="50" height="9" rx="4"/><circle cx="252" cy="212" r="5"/></g>`;
+    s += `<g class="tg" style="font-size:11px">` + [['a',207,108],['b',224,124],['c',224,184],['d',207,200],['e',190,184],['f',190,124],['g',207,166]].map(([n, x, y]) => `<text x="${x}" y="${y}" text-anchor="middle">${n}</text>`).join('') + '</g>';
+    const segTag = (n, i) => n === 'COM' ? ['COM: ' + com, comC] : (n === 'dp' ? ['dp: ไม่ต่อ', '#868e96'] : [n + ': ' + PL(h[n]), WC.sig[i % WC.sig.length]]);
+    const outX = [60, 135, 210, 285, 360];
+    ['g','f','COM','a','b'].forEach((n, i) => {
+      const px = 166 + i * 22; const [t, c] = segTag(n, i);
+      s += `<rect x="${px - 2}" y="56" width="4" height="14" fill="${LEG}"/>` + W([[px, 56], [px, 48], [outX[i], 34], [outX[i], 30]], c) + TAG(outX[i], 20, t, c, 64);
+    });
+    ['e','d','COM','c','dp'].forEach((n, i) => {
+      const px = 166 + i * 22; const [t, c] = segTag(n, i + 5);
+      s += `<rect x="${px - 2}" y="230" width="4" height="14" fill="${LEG}"/>` + W([[px, 244], [px, 252], [outX[i], 266], [outX[i], 270]], c) + TAG(outX[i], 280, t, c, 64);
+    });
+    return SVG(420, 300, s);
+  }
+
+  function diaLCD(){
+    const h = st.hw.lcd;
+    if (h.type === 'i2c') {
+      let s = `<rect x="20" y="20" width="300" height="90" rx="6" fill="#2f9e44"/><rect x="45" y="35" width="250" height="60" rx="3" fill="#1c7ed6" opacity=".85"/><rect x="320" y="35" width="60" height="60" rx="3" fill="#212529"/>`;
+      const pins = [['GND','GND',WC.gnd],['VCC','5V',WC.v5],['SDA','A4',WC.sig[0]],['SCL','A5',WC.sig[1]]];
+      pins.forEach(([n, d, c], i) => { const py = 44 + i * 14, tx = 470; s += `<rect x="380" y="${py - 2}" width="18" height="4" fill="${LEG}"/>` + W([[398, py], [420, py], [440, 30 + i * 32], [440, 30 + i * 32]], c) + TAG(tx, 30 + i * 32, n + ' → ' + d, c, 90); });
+      return SVG(530, 150, s);
+    }
+    const P = [['VSS','GND'],['VDD','5V'],['V0','*'],['RS',PL(h.RS)],['RW','GND'],['E',PL(h.E)],['D0','—'],['D1','—'],['D2','—'],['D3','—'],['D4',PL(h.D4)],['D5',PL(h.D5)],['D6',PL(h.D6)],['D7',PL(h.D7)],['A','5V'],['K','GND']];
+    let s = `<rect x="10" y="10" width="640" height="110" rx="8" fill="#2f9e44"/><rect x="60" y="28" width="540" height="64" rx="4" fill="#94d82d"/><text x="330" y="66" text-anchor="middle" style="font:600 20px ui-monospace,monospace;fill:#2b3a12">16x2 LCD</text>`;
+    P.forEach(([n, d], i) => {
+      const x = 40 + i * 38;
+      const c = d === '5V' ? WC.v5 : d === 'GND' ? WC.gnd : d === '—' ? '#adb5bd' : d === '*' ? WC.sig[3] : WC.sig[(i % 6)];
+      s += `<circle cx="${x}" cy="106" r="5" fill="#ffd43b" stroke="#000" stroke-opacity=".3"/>`;
+      s += W([[x, 111], [x, 140]], c) + TAG(x, 150, d, c, 34);
+      s += TX(x, 178, String(i + 1), 'b') + TX(x, 194, n, 'mut');
+    });
+    return SVG(660, 204, s);
+  }
+
+  function diaKeypad(){
+    const h = st.hw.keypad;
+    const K = ['1','2','3','A','4','5','6','B','7','8','9','C','*','0','#','D'];
+    let s = `<rect x="100" y="10" width="160" height="190" rx="10" fill="#212529"/>`;
+    K.forEach((k, i) => { const x = 116 + (i % 4) * 34, y = 24 + Math.floor(i / 4) * 42; const red = /[A-D*#]/.test(k); s += `<rect x="${x}" y="${y}" width="28" height="32" rx="5" fill="${red ? '#e03131' : '#1c7ed6'}"/><text x="${x + 14}" y="${y + 21}" text-anchor="middle" class="tg">${k}</text>`; });
+    s += `<rect x="146" y="200" width="68" height="44" fill="#ced4da"/>`;
+    KP_KEYS.forEach((k, i) => {
+      const px = 152 + i * 8, tx = 30 + i * 43, c = WC.sig[i];
+      s += W([[px, 200], [px, 244]], '#868e96', 2);
+      s += W([[px, 244], [px, 252], [tx, 272], [tx, 282]], c) + TAG(tx, 292, PL(h[k]), c, 38) + TX(tx, 320, k, 'b');
+    });
+    return SVG(360, 330, s);
+  }
+
+  const DIA = [
+    {k:'board', full:true, title:'Arduino UNO R4 WiFi — หาขาที่ต้องเสียบ', svg:diaBoard,
+     note:() => 'สีเหลือง = ขาที่ข้อสอบใช้ (ตามที่ตั้งใน Generator) · แดง = ขาชนกัน · ชุด <b>ANALOG IN (A0–A5)</b> อยู่ขอบล่างขวา ถัดจาก POWER (5V, GND) · ชุดขา D0–D13 อยู่ขอบบน'},
+    {k:'temp', title:'Thermistor NTC + R 10k (วัดอุณหภูมิ)', svg:diaNTC,
+     note:() => 'ใช้ 3 สาย: 5V, GND และสายจาก <b>จุดชน</b> (ขาที่ R กับ NTC เสียบแถวเดียวกัน) ไปขา ' + PL(st.hw.temp.TEMP) + ' · แต่ละขาอุปกรณ์ต้องอยู่<b>คนละแถว</b>บน breadboard · จับ NTC แล้วค่าต้อง<b>ขึ้น</b> ถ้าลด → สลับ R กับ NTC หรือติ๊ก “NTC อยู่ฝั่ง 5V”'},
+    {k:'pot', title:'Potentiometer (ตัวต้านทานปรับค่าได้)', svg:diaPot,
+     note:() => 'หันหน้าที่มีขา 3 ขาเข้าหาตัว · ขาข้าง 2 ขา → 5V กับ GND · <b>ขากลาง</b> → ' + PL(st.hw.pot.POT) + ' · สลับขาซ้าย/ขวา = หมุนแล้วค่ากลับทาง (ไม่พัง) · อ่านได้ 0–1023'},
+    {k:'rgb', title:'RGB LED (4 ขา)', svg:diaRGB,
+     note:() => 'ขา<b>ยาวที่สุด</b> = COM · ลำดับทั่วไป R – COM – G – B (บางรุ่นต่าง → ใช้ TEST_RGB เช็ก) · ทุกสีต้องมี R 220Ω (แดง-แดง-น้ำตาล) · ' + (st.hw.rgb.anode ? 'ตั้งเป็น Common Anode: COM → 5V' : 'ตั้งเป็น Common Cathode: COM → GND') + ' · ถ้าสีกลับด้าน ให้สลับ checkbox common anode ใน Generator'},
+    {k:'btn', title:'Push button (2 ขา)', svg:diaButton,
+     note:() => 'ไม่มีขั้ว: ขาหนึ่ง → ' + PL(st.hw.btn.BTN) + ', อีกขา → GND · โค้ดใช้ <code>INPUT_PULLUP</code> → <b>ไม่ต้องมี R</b> · ไม่กด = HIGH, กด = LOW · สองขาต้องอยู่คนละแถวบน breadboard · (ถ้าเป็นปุ่ม 4 ขา ใช้ขาทแยงมุม)'},
+    {k:'ultra', title:'Ultrasonic HC-SR04', svg:diaUltra, note:() => 'VCC ต้อง 5V · Trig = output, Echo = input · ได้ 999 = ไม่มี echo (สลับ Trig/Echo?)'},
+    {k:'seg', title:'7-Segment', svg:diaSeg,
+     note:() => { const h = st.hw.seg; let t = 'มองหน้าจอ จุด dp อยู่ล่างขวา · ทุก segment ใส่ R 220Ω–1kΩ · ' + (h.anode ? 'Common Anode' : 'Common Cathode');
+       if (+h.digits === 2 && h.mode === 'mux') t += ` · <b>2 หลัก</b>: ต่อ a–g ของสองตัวขนานกัน, COM ตัวซ้าย → ${PL(h.DIG1)}, COM ตัวขวา → ${PL(h.DIG2)}`;
+       if (+h.digits === 2 && h.mode !== 'mux') t += ' · <b>หลักขวา</b>: ' + SEG_KEYS.map(k => k + '→' + PL(h[k + '2'])).join(', ') + ' (COM → ' + (h.anode ? '5V' : 'GND') + ')';
+       return t; }},
+    {k:'lcd', full:true, title:'LCD 16x2', svg:diaLCD,
+     note:() => st.hw.lcd.type === 'i2c' ? 'แบบ I2C มี 4 ขา · address ปกติ 0x27 หรือ 0x3F (หาด้วย TEST_I2C_Scanner)'
+       : 'นับขา 1 จาก<b>ซ้าย</b> (ขาที่เขียน VSS / 1) · <b>*</b> V0 = ขากลางของ Pot (ขาข้าง 5V/GND) หรือ R 1k–2.2k ลง GND — ไม่ต่อ = จอว่าง · D0–D3 ไม่ต้องต่อ · ขา 15 (A) ถ้าจอสว่างจ้า/ร้อน ใส่ R 220Ω'},
+    {k:'keypad', title:'Keypad 4x4', svg:diaKeypad, note:() => 'หงายหน้าปุ่ม สายอยู่ล่าง นับซ้าย → ขวา: R1 R2 R3 R4 C1 C2 C3 C4 · ต่อตรงไม่ต้องมี R · ปุ่มเพี้ยน = แก้ array rowPins/colPins'},
+    {k:'led', title:'LED ธรรมดา', svg:diaLED, note:() => 'ขายาว = + (anode) · ขาสั้น/ฝั่งขอบแบน = − · ต้องมี R 220Ω เสมอ'},
+    {k:'buzzer', title:'Buzzer', svg:diaBuzzer, note:() => 'ขายาว / ด้านที่มี + → ขา Arduino · passive: tone(pin, 1000) · active: digitalWrite'},
+  ];
+  function renderDiagrams(){
+    const box = $('#diagrams'); if (!box) return;
+    const onlyUsed = $('#diaOnlyUsed').checked;
+    const u = usedHW(st);
+    box.innerHTML = '';
+    DIA.forEach(d => {
+      if (onlyUsed && d.k !== 'board' && !u.has(d.k)) return;
+      const card = el('div', {class:'card' + (d.full ? ' full' : '')}, el('h2', null, d.title));
+      const fig = el('div', {class:'fig'}); fig.innerHTML = d.svg();
+      const note = el('p', {class:'small'}); note.innerHTML = d.note();
+      card.append(fig, note);
+      box.append(card);
+    });
+  }
+  $('#diaOnlyUsed').onchange = renderDiagrams;
+
+  let code = '';
+  function update(){
+    save();
+    code = generate(st);
+    $('#out').textContent = code;
+    const chk = checkState(st);
+    const w = $('#warns'); w.innerHTML = '';
+    chk.warnings.forEach(x => w.append(el('div', {class:'msg warn'}, '⚠ ' + x)));
+    if (!chk.warnings.length) w.append(el('div', {class:'msg ok'}, `✓ ไม่มีขาชน · ใช้ ${chk.pinCount}/20 ขา`));
+    else w.append(el('div', {class:'msg info small'}, `ใช้ ${chk.pinCount}/20 ขา`));
+    const rows = Object.keys(chk.owner).sort((a, b) => { const v = x => /^A/.test(x) ? 14 + +x[1] : +x; return v(a) - v(b); })
+      .map(pn => el('tr', null, el('td', {class:'mono'}, /^A/.test(pn) ? pn : 'D' + pn), el('td', null, chk.owner[pn].join(', '))));
+    const tb = $('#pinTable'); tb.innerHTML = '';
+    tb.append(el('table', null, el('tr', null, el('th', null, 'ขา'), el('th', null, 'ต่อกับ')), rows));
+    renderDiagrams();
+    document.querySelectorAll('.preview').forEach(pv => { const t = st.tasks[+pv.dataset.i]; if (t) pv.textContent = '→ ' + describeTask(st, t); });
+  }
+  $('#copyCode').onclick = () => copy(code);
+  $('#dlCode').onclick = () => download('exam_sketch.ino', code);
+
+  function renderAll(){ renderCfg(); renderTasks(); renderHW(); update(); }
+  renderAll();
+
+  // ---------- snippets ----------
+  const snipBox = $('#snips');
+  document.querySelectorAll('script.snipsrc').forEach(s => {
+    const src = s.textContent.replace(/^\n/, '').replace(/\s+$/, '') + '\n';
+    const file = s.dataset.file;
+    const card = el('div', {class:'card snip', 'data-search':(s.dataset.title + ' ' + s.dataset.tags + ' ' + file).toLowerCase()},
+      el('div', {class:'head'}, el('b', null, s.dataset.title), file ? el('code', {class:'small muted'}, file + '.ino') : el('span', {class:'small muted'}, 'ชิ้นส่วนโค้ด'),
+        el('button', {class:'btn sm pri', onclick:() => copy(src)}, 'Copy'),
+        file ? el('button', {class:'btn sm', onclick:() => download(file + '.ino', src)}, '.ino') : null),
+      el('pre', {class:'code short'}, src));
+    snipBox.append(card);
+  });
+  $('#snipFilter').oninput = e => { const q = e.target.value.toLowerCase().trim(); snipBox.querySelectorAll('.snip').forEach(c => c.style.display = !q || c.dataset.search.includes(q) ? '' : 'none'); };
+
+  // ---------- 7-seg tool ----------
+  const segBits = [0];
+  const SEG_NAMES = ['a','b','c','d','e','f','g','dp'];
+  const segPaths = [...document.querySelectorAll('#segSvg [data-s]')];
+  const QUICK = {'0':0x3F,'1':0x06,'2':0x5B,'3':0x4F,'4':0x66,'5':0x6D,'6':0x7D,'7':0x07,'8':0x7F,'9':0x6F,'A':0x77,'b':0x7C,'C':0x39,'d':0x5E,'E':0x79,'F':0x71,'H':0x76,'L':0x38,'P':0x73,'U':0x3E,'-':0x40};
+  const qs = $('#segQuick'); qs.append(el('option', {value:''}, 'เลือกตัวอักษร…')); Object.keys(QUICK).forEach(k => qs.append(el('option', {value:k}, k)));
+  qs.onchange = () => { if (qs.value) { segBits[0] = QUICK[qs.value]; drawSeg(); } };
+  $('#segClear').onclick = () => { segBits[0] = 0; drawSeg(); };
+  segPaths.forEach(pth => pth.addEventListener('click', () => { segBits[0] ^= 1 << +pth.dataset.s; drawSeg(); }));
+  function drawSeg(){
+    const v = segBits[0];
+    segPaths.forEach(pth => pth.setAttribute('fill', v & (1 << +pth.dataset.s) ? 'var(--accent)' : 'var(--line)'));
+    const on = SEG_NAMES.filter((n, i) => v & (1 << i));
+    const hex = '0x' + v.toString(16).toUpperCase().padStart(2, '0');
+    const ca = '0x' + ((~v) & 0xFF).toString(16).toUpperCase().padStart(2, '0');
+    const arr = SEG_NAMES.slice(0, 7).map((n, i) => v & (1 << i) ? 1 : 0);
+    const out = $('#segOut'); out.innerHTML = '';
+    out.append(el('table', null,
+      el('tr', null, el('th', null, 'segment ที่ติด'), el('td', {class:'mono'}, on.join(' ') || '—')),
+      el('tr', null, el('th', null, 'Common Cathode (bit0=a)'), el('td', {class:'mono'}, hex + '  = 0b' + v.toString(2).padStart(8, '0'))),
+      el('tr', null, el('th', null, 'Common Anode'), el('td', {class:'mono'}, ca)),
+      el('tr', null, el('th', null, 'array {a..g}'), el('td', {class:'mono'}, '{' + arr.join(', ') + '}'))));
+  }
+  drawSeg();
+
+  // ---------- MQTT tester ----------
+  let client = null;
+  const log = (m, cls) => { const d = el('div', null, new Date().toLocaleTimeString() + '  ' + m); if (cls) d.style.color = cls; const L = $('#mLog'); L.append(d); L.scrollTop = L.scrollHeight; };
+  const stat = m => $('#mStat').textContent = m;
+  const syncSid = () => { const s = $('#mSid').value.trim(); $('#mPre').textContent = s + '/'; $('#mFilter').value = s + '/#'; renderQuick(); };
+  $('#mSid').value = st.cfg.sid; syncSid();
+  $('#mSid').oninput = syncSid;
+  document.querySelectorAll('[data-broker]').forEach(b => b.onclick = () => $('#mUrl').value = b.dataset.broker);
+  function loadMqttLib(){
+    return new Promise((res, rej) => {
+      if (window.mqtt) return res();
+      const s = document.createElement('script');
+      s.src = 'https://cdn.jsdelivr.net/npm/mqtt@5.10.1/dist/mqtt.min.js';
+      s.onload = res; s.onerror = () => rej(new Error('โหลด mqtt.js ไม่ได้ (ไม่มีเน็ต?)'));
+      document.head.append(s);
+    });
+  }
+  $('#mConn').onclick = async () => {
+    try {
+      stat('กำลังโหลด…'); await loadMqttLib();
+      if (client) client.end(true);
+      stat('กำลังต่อ…');
+      client = mqtt.connect($('#mUrl').value.trim(), {clientId:'web_' + Math.random().toString(16).slice(2, 10), reconnectPeriod:3000, connectTimeout:8000});
+      client.on('connect', () => { stat('✓ Connected'); log('connected ' + $('#mUrl').value, 'var(--ok)'); client.subscribe($('#mFilter').value.trim(), err => log(err ? 'subscribe error ' + err.message : 'subscribed ' + $('#mFilter').value, err ? 'var(--warn)' : null)); });
+      client.on('message', (t, m) => log(t + '  =  ' + m.toString()));
+      client.on('error', e => { stat('error'); log('error: ' + e.message, 'var(--warn)'); });
+      client.on('close', () => stat('ปิดการเชื่อมต่อ'));
+    } catch (e) { stat(e.message); log(e.message, 'var(--warn)'); }
+  };
+  $('#mDisc').onclick = () => { if (client) client.end(true); client = null; stat('ยังไม่ต่อ'); };
+  const pub = (tp, pl) => { if (!client || !client.connected) { toast('ยังไม่ได้ Connect'); return; } const full = $('#mSid').value.trim() + '/' + tp; client.publish(full, String(pl)); log('→ ' + full + '  =  ' + pl, 'var(--accent)'); };
+  $('#mPub').onclick = () => pub($('#mTopic').value.trim(), $('#mPayload').value);
+  $('#mClr').onclick = () => $('#mLog').innerHTML = '';
+  function renderQuick(){
+    const q = $('#mQuick'); q.innerHTML = '';
+    const items = [['venus','45'],['venus','30'],['venus','15'],['venus','5'],['prob_stat','0'],['prob_stat','7'],['prob_stat','9']];
+    st.tasks.filter(t => TASK_DEF[t.type].dir === 'sub').forEach(t => { const tp = String(t.topic); if (!items.some(i => i[0] === tp)) items.push([tp, t.type === 'S_ONOFF' ? t.on : (t.type === 'S_LCD' ? 'Hello' : '42')]); });
+    items.forEach(([tp, pl]) => q.append(el('button', {class:'btn sm mono', onclick:() => { $('#mTopic').value = tp; $('#mPayload').value = pl; pub(tp, pl); }}, tp + ' = ' + pl)));
+  }
+})();
+</script>
+</body>
+</html>
